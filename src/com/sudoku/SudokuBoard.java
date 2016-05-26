@@ -26,7 +26,7 @@ public class SudokuBoard {
     public void parseToCells(int[][] arrayBoard) {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int column = 0; column < BOARD_SIZE; column++) {
-                board[row][column] = new Cell(row, column, arrayBoard[row][column]);
+                this.board[row][column] = new Cell(row, column, arrayBoard[row][column]);
             }
         }
     }
@@ -73,7 +73,7 @@ public class SudokuBoard {
      *
      * @return A Cell with an zero value or null if there isn't any empty cell
      */
-    public Cell getEmptyCell() {
+    public Cell getFirstEmptyCell() {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int column = 0; column < BOARD_SIZE; column++) {
                 if (getCell(row, column).isCellEmpty()) {
@@ -87,11 +87,13 @@ public class SudokuBoard {
     /**
      * Verify if there is an cell with a num value in an specific column
      *
+     * @param column The column position in the board
+     * @param num    A digit number
      * @return The condition of a column if it contains a cell with a num value
      */
-    public boolean isUsedInColumn(int col, int num) {
-        for (int row = 0; row < 9; row++) {
-            if (getCell(row, col).getValue() == num) {
+    public boolean isUsedInColumn(int column, int num) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            if (getCell(row, column).getValue() == num) {
                 return true;
             }
         }
@@ -101,10 +103,12 @@ public class SudokuBoard {
     /**
      * Verify if there is an cell with a num value in an specific row
      *
+     * @param row The row position in the board
+     * @param num A digit number
      * @return The condition of a row if it contains a cell with a num value
      */
     public boolean isUsedInRow(int row, int num) {
-        for (int col = 0; col < 9; col++) {
+        for (int col = 0; col < BOARD_SIZE; col++) {
             if (getCell(row, col).getValue() == num) {
                 return true;
             }
@@ -115,6 +119,9 @@ public class SudokuBoard {
     /**
      * Verify if there is an cell with a num value in an specific subGrid
      *
+     * @param row    The row position in the board
+     * @param column The column position in the board
+     * @param num    A digit number
      * @return The condition of a subGrid if it contains a cell with a num value
      */
     public boolean isUsedInSubGrid(int row, int column, int num) {
@@ -122,8 +129,8 @@ public class SudokuBoard {
         int initPosY = getIniPosSubGrid(column);
         for (int i = initPosX; i < initPosX + 3; i++) {
             for (int j = initPosY; j < initPosY + 3; j++) {
-                if (getCell(i, j).getValue() == num) {
-                    return true;
+                if (getCell(i, j).isCellValue(num)) {
+                    return getCell(i, j).isCellValue(num);
                 }
             }
         }
@@ -133,12 +140,12 @@ public class SudokuBoard {
     /**
      * Get the initial position of a sub grid according an value
      *
-     * @param value The value of a position
+     * @param num A digit number
      * @return The init position on a sub grid
      */
-    public int getIniPosSubGrid(int value) {
-        int modRes = value % 3;
-        return value - modRes;
+    public static int getIniPosSubGrid(int num) {
+        int modRes = num % 3;
+        return num - modRes;
     }
 
     @Override

@@ -29,6 +29,12 @@ public class CellTest {
     }
 
     @Test
+    public void getDefaultValueTest() {
+        Cell cell = new Cell(1, 2);
+        assertEquals(0, cell.getValue());
+    }
+
+    @Test
     public void setPosXTest() {
         Cell cell = new Cell(1, 2);
         cell.setPosX(3);
@@ -43,7 +49,7 @@ public class CellTest {
     }
 
     @Test
-    public void setValueTest() {
+         public void setValueTest() {
         Cell cell = new Cell(1, 2);
         cell.setValue(3);
         assertEquals(3, cell.getValue());

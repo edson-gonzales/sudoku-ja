@@ -59,6 +59,18 @@ public class Cell {
         return false;
     }
 
+    /**
+     * Verify if the cell has a num value
+     *
+     * @return The condition of the cell if it has a num value
+     */
+    public boolean isCellValue(int num) {
+        if (this.value == num) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "PosX: " + getPosX() + " PosY: " + getPosY() + " Value: " + getValue();
