@@ -67,22 +67,6 @@ public class SudokuBoard {
     }
 
     /**
-     * Verify if there is an empty cell in the board
-     *
-     * @return The condition of the board if it contains an empty cell
-     */
-    public Boolean isThereAnEmptyCell() {
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int column = 0; column < BOARD_SIZE; column++) {
-                if (getCell(row, column).isEmpty()) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Get an empty Cell from the board
      *
      * @return A Cell with an zero value or null if there isn't any empty cell

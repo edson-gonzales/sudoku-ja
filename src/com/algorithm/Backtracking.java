@@ -28,13 +28,18 @@ public class Backtracking implements Algorithm {
         int column = emptyCell.getPosY();
 
         for (int num = 1; num <= 9; num++) {
-            if (isPracticable(row, column, num)) {
-                sudokuBoard.setCell(row, column, num);
-                if (solve(sudokuBoard)) {
-                    return true;
-                }
-                sudokuBoard.clearCell(row, column);
+            if (findSolution(row, column, num)) return true;
+        }
+        return false;
+    }
+
+    private boolean findSolution(int row, int column, int num) {
+        if (isPracticable(row, column, num)) {
+            sudokuBoard.setCell(row, column, num);
+            if (solve(sudokuBoard)) {
+                return true;
             }
+            sudokuBoard.clearCell(row, column);
         }
         return false;
     }

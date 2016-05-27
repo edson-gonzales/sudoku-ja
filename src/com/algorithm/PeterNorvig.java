@@ -25,7 +25,7 @@ public class PeterNorvig implements Algorithm {
 
         Cell emptyCell = this.sudokuBoard.getFirstEmptyCell();
 
-        if (this.sudokuBoard.getFirstEmptyCell() == null) {
+        if (emptyCell == null) {
             return true;
         }
 
