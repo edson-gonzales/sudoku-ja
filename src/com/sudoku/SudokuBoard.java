@@ -14,9 +14,10 @@ public class SudokuBoard {
         parseToCells(arrayBoard);
     }
 
-    public int getBoardSize(){
+    public int getBoardSize() {
         return BOARD_SIZE;
     }
+
     public SudokuBoard(Cell[][] board) {
         this.board = board;
     }
@@ -163,13 +164,28 @@ public class SudokuBoard {
 
     @Override
     public String toString() {
-        String cadena = " ";
-        for (int posX = 0; posX < BOARD_SIZE; posX++) {
-            for (int posY = 0; posY < BOARD_SIZE; posY++) {
-                cadena = cadena + getCell(posX, posY).getValue() + " ";
+        String line = "------+------+------";
+        StringBuilder cadena = new StringBuilder();
+
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            if (row != 0 && row % 3 == 0) {
+                cadena.append(line).append("\n");
             }
-            cadena = cadena + "\n" + " ";
+            int col = 0;
+            while (col < BOARD_SIZE) {
+                int i;
+                for (i = col; i < col + 3; i++) {
+                    if (getCell(row, i).isEmpty()) {
+                        cadena.append(". ");
+                    } else {
+                        cadena.append(getCell(row, i).getValue()).append(" ");
+                    }
+                }
+                cadena.append("|");
+                col = i;
+            }
+            cadena.append("\n");
         }
-        return cadena;
+        return cadena.toString();
     }
 }

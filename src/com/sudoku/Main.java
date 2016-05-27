@@ -19,21 +19,22 @@ public class Main {
                         {0, 0, 5, 2, 0, 6, 3, 0, 0}};
 
         SudokuBoard sudokuBoard = new SudokuBoard(grid);
-        Algorithm backtracking = new Backtracking();
-        Boolean isSolved = backtracking.solve(sudokuBoard);
-
-        if (isSolved)
-            System.out.println(sudokuBoard.toString());
-        else
-            System.out.println(("There is not solution"));
-
-        Algorithm peterNorvig = new PeterNorvig();
-        isSolved = peterNorvig.solve(sudokuBoard);
-
-        if (isSolved)
-            System.out.println(sudokuBoard.toString());
-        else
-            System.out.println(("There is not solution"));
+        System.out.println(sudokuBoard.toString());
+//        Algorithm backtracking = new Backtracking();
+//        Boolean isSolved = backtracking.solve(sudokuBoard);
+//
+//        if (isSolved)
+//            System.out.println(sudokuBoard.toString());
+//        else
+//            System.out.println(("There is not solution"));
+//
+//        Algorithm peterNorvig = new PeterNorvig();
+//        isSolved = peterNorvig.solve(sudokuBoard);
+//
+//        if (isSolved)
+//            System.out.println(sudokuBoard.toString());
+//        else
+//            System.out.println(("There is not solution"));
 
 
 //        3 1 6 5 7 8 4 9 2
