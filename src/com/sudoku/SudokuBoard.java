@@ -72,11 +72,9 @@ public class SudokuBoard {
      * @return A Cell with an zero value or null if there isn't any empty cell
      */
     public Cell getFirstEmptyCell() {
-        int row = 0;
-        while (row < BOARD_SIZE) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
             if( getFirstEmptyCellInRow(row) != null)
                 return getFirstEmptyCellInRow(row);
-            row++;
         }
         return null;
     }
