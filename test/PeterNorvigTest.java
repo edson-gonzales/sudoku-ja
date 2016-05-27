@@ -1,16 +1,17 @@
 import com.algorithm.Algorithm;
 import com.algorithm.Backtracking;
+import com.algorithm.PeterNorvig;
 import com.sudoku.SudokuBoard;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
- * This class represent the unit tests for the Backtracking class
+ * This class represent the unit tests for the PeterNorvig class
  *
  * @author Alejandra Arteaga
  */
-public class BacktrackingTest {
+public class PeterNorvigTest {
     @Test
     public void solveSudokuTest() {
         int grid[][] =
@@ -25,7 +26,7 @@ public class BacktrackingTest {
                         {0, 0, 5, 2, 0, 6, 3, 0, 0}};
 
         SudokuBoard sudokuBoard = new SudokuBoard(grid);
-        Algorithm backtraking = new Backtracking();
-        assertTrue(backtraking.solve(sudokuBoard));
+        Algorithm peterNorvig = new PeterNorvig();
+        assertTrue(peterNorvig.solve(sudokuBoard));
     }
 }

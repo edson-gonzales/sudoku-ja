@@ -63,7 +63,7 @@ public class SudokuBoard {
     public Boolean isThereAnEmptyCell() {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int column = 0; column < BOARD_SIZE; column++) {
-                if (getCell(row, column).isCellEmpty()) {
+                if (getCell(row, column).isEmpty()) {
                     return true;
                 }
             }
@@ -79,7 +79,7 @@ public class SudokuBoard {
     public Cell getFirstEmptyCell() {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int column = 0; column < BOARD_SIZE; column++) {
-                if (getCell(row, column).isCellEmpty()) {
+                if (getCell(row, column).isEmpty()) {
                     return getCell(row, column);
                 }
             }
@@ -132,8 +132,8 @@ public class SudokuBoard {
         int initPosY = getIniPosSubGrid(column);
         for (int i = initPosX; i < initPosX + 3; i++) {
             for (int j = initPosY; j < initPosY + 3; j++) {
-                if (getCell(i, j).isCellValue(num)) {
-                    return getCell(i, j).isCellValue(num);
+                if (getCell(i, j).isValue(num)) {
+                    return true;
                 }
             }
         }

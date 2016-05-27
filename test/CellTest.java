@@ -58,7 +58,7 @@ public class CellTest {
     @Test
     public void isCellEmptyTest() {
         Cell cell = new Cell(1, 2);
-        assertTrue(cell.isCellEmpty());
+        assertTrue(cell.isEmpty());
     }
 
 }

@@ -12,7 +12,7 @@ public class Backtracking implements Algorithm {
     @Override
     public Boolean solve(SudokuBoard sudokuBoard) {
 
-        Cell emptyCell = sudokuBoard.getEmptyCell();
+        Cell emptyCell = sudokuBoard.getFirstEmptyCell();
 
         if (emptyCell == null) {
             return true;
