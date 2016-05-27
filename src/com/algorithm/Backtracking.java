@@ -18,25 +18,25 @@ public class Backtracking implements Algorithm {
             return true;
         }
 
-        int i = emptyCell.getPosX();
-        int j = emptyCell.getPosY();
+        int row = emptyCell.getPosX();
+        int column = emptyCell.getPosY();
 
         for (int num = 1; num <= 9; num++) {
-            if (isPracticable(i, j, sudokuBoard, num)) {
-                sudokuBoard.setCell(i, j, num);
+            if (isPracticable(row, column, sudokuBoard, num)) {
+                sudokuBoard.setCell(row, column, num);
                 if (solve(sudokuBoard)) {
                     return true;
                 }
-                sudokuBoard.setCell(i, j, 0);
+                sudokuBoard.clearCell(row, column);
             }
         }
         return false;
     }
 
-    public Boolean isPracticable(int i, int j, SudokuBoard sudokuBoard, int num) {
-        Boolean isPracticableInColumn = !sudokuBoard.isUsedInColumn(j, num);
-        Boolean isPracticableInRow = !sudokuBoard.isUsedInRow(i, num);
-        Boolean isPracticableInSubGrid = !sudokuBoard.isUsedInSubGrid(i, j, num);
+    public Boolean isPracticable(int row, int column, SudokuBoard sudokuBoard, int num) {
+        Boolean isPracticableInColumn = !sudokuBoard.isUsedInColumn(column, num);
+        Boolean isPracticableInRow = !sudokuBoard.isUsedInRow(row, num);
+        Boolean isPracticableInSubGrid = !sudokuBoard.isUsedInSubGrid(row, column, num);
         return isPracticableInColumn && isPracticableInRow && isPracticableInSubGrid;
     }
 }

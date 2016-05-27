@@ -56,6 +56,16 @@ public class SudokuBoard {
     }
 
     /**
+     * Set a zero value in an specific cell from the board
+     *
+     * @param row    The row position in the board
+     * @param column The column position in the board
+     */
+    public void clearCell(int row, int column) {
+        getCell(row, column).setValue(0);
+    }
+
+    /**
      * Verify if there is an empty cell in the board
      *
      * @return The condition of the board if it contains an empty cell
@@ -96,7 +106,7 @@ public class SudokuBoard {
      */
     public boolean isUsedInColumn(int column, int num) {
         for (int row = 0; row < BOARD_SIZE; row++) {
-            if (getCell(row, column).getValue() == num) {
+            if (getCell(row, column).isValue(num)) {
                 return true;
             }
         }
@@ -112,7 +122,7 @@ public class SudokuBoard {
      */
     public boolean isUsedInRow(int row, int num) {
         for (int col = 0; col < BOARD_SIZE; col++) {
-            if (getCell(row, col).getValue() == num) {
+            if (getCell(row, col).isValue(num)) {
                 return true;
             }
         }
