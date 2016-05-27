@@ -91,7 +91,7 @@ public class SudokuBoard {
      */
     public boolean isUsedInColumn(int column, int num) {
         for (int row = 0; row < BOARD_SIZE; row++) {
-            if (getCell(row, column).isValue(num)) {
+            if (getCell(row, column).hasValue(num)) {
                 return true;
             }
         }
@@ -107,7 +107,7 @@ public class SudokuBoard {
      */
     public boolean isUsedInRow(int row, int num) {
         for (int col = 0; col < BOARD_SIZE; col++) {
-            if (getCell(row, col).isValue(num)) {
+            if (getCell(row, col).hasValue(num)) {
                 return true;
             }
         }
@@ -127,7 +127,7 @@ public class SudokuBoard {
         int initPosY = getIniPosSubGrid(column);
         for (int i = initPosX; i < initPosX + 3; i++) {
             for (int j = initPosY; j < initPosY + 3; j++) {
-                if (getCell(i, j).isValue(num)) {
+                if (getCell(i, j).hasValue(num)) {
                     return true;
                 }
             }

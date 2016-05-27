@@ -53,7 +53,7 @@ public class Cell {
      * @return The condition of the cell if it has a zero value
      */
     public boolean isEmpty() {
-        return isValue(0);
+        return hasValue(0);
     }
 
     /**
@@ -61,7 +61,7 @@ public class Cell {
      *
      * @return The condition of the cell if it has a num value
      */
-    public boolean isValue(int num) {
+    public boolean hasValue(int num) {
         return this.value == num;
     }
 
