@@ -138,14 +138,28 @@ public class SudokuBoard {
         int initPosX = getIniPosSubGrid(row);
         int initPosY = getIniPosSubGrid(column);
         for (int i = initPosX; i < initPosX + 3; i++) {
-            for (int j = initPosY; j < initPosY + 3; j++) {
-                if (getCell(i, j).hasValue(num)) {
-                    return true;
-                }
+            if(isUsedInRowSubGrid(i,initPosY,num))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Verify if there is an cell with a num value in an specific row
+     *
+     * @param i The row position in the board
+     * @param num A digit number
+     * @return The condition of a row if it contains a cell with a num value
+     */
+    public boolean isUsedInRowSubGrid(int i, int initPosY, int num) {
+        for (int j = initPosY; j < initPosY + 3; j++) {
+            if (getCell(i, j).hasValue(num)) {
+                return true;
             }
         }
         return false;
     }
+
 
     /**
      * Get the initial position of a sub grid according an value
