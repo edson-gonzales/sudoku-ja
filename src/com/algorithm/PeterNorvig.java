@@ -12,16 +12,15 @@ import java.util.List;
  * This class represent the Peter Norvig's algorithm
  */
 public class PeterNorvig implements Algorithm {
-
     private SudokuBoard board;
 
     @Override
     public Boolean solve(SudokuBoard sudokuBoard) {
-        board = sudokuBoard;
+        this.board = sudokuBoard;
 
-        Cell emptyCell = board.getFirstEmptyCell();
+        Cell emptyCell = this.board.getFirstEmptyCell();
 
-        if (board.getFirstEmptyCell() == null) {
+        if (this.board.getFirstEmptyCell() == null) {
             return true;
         }
 
@@ -29,11 +28,13 @@ public class PeterNorvig implements Algorithm {
         int column = emptyCell.getPosY();
 
         for (Integer value : getNumbersForCell(row, column)) {
-            board.getCell(row, column).setValue(value);
-            if (solve(board))
+            this.board.getCell(row, column).setValue(value);
+            if (solve(this.board))
                 return true;
         }
-        board.clearCell(row, column);
+
+        this.board.clearCell(row, column);
+
         return false;
     }
 
@@ -50,7 +51,7 @@ public class PeterNorvig implements Algorithm {
         int initPosY = SudokuBoard.getIniPosSubGrid(column);
         for (int i = initPosX; i < initPosX + 3; i++) {
             for (int j = initPosY; j < initPosY + 3; j++) {
-                deleteCellValue(digits, board.getCell(row, column));
+                deleteCellValue(digits, this.board.getCell(row, column));
             }
         }
         return digits;
@@ -64,14 +65,14 @@ public class PeterNorvig implements Algorithm {
     }
 
     private List<Integer> deleteNumbersInColumn(List<Integer> numbers, int column) {
-        for (int row = 0; row < board.getBoardSize(); row++)
-            deleteCellValue(numbers, board.getCell(row, column));
+        for (int row = 0; row < this.board.getBoardSize(); row++)
+            deleteCellValue(numbers, this.board.getCell(row, column));
         return numbers;
     }
 
     private List<Integer> deleteNumbersInRow(List<Integer> numbers, int row) {
-        for (int column = 0; column < board.getBoardSize(); column++)
-            deleteCellValue(numbers, board.getCell(row, column));
+        for (int column = 0; column < this.board.getBoardSize(); column++)
+            deleteCellValue(numbers, this.board.getCell(row, column));
         return numbers;
     }
 }

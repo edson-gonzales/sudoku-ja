@@ -62,9 +62,7 @@ public class Cell {
      * @return The condition of the cell if it has a num value
      */
     public boolean isValue(int num) {
-        if (this.value == num)
-            return true;
-        return false;
+        return this.value == num;
     }
 
     @Override
