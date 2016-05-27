@@ -50,13 +50,13 @@ public class PeterNorvig implements Algorithm {
         int initPosY = SudokuBoard.getIniPosSubGrid(column);
         for (int i = initPosX; i < initPosX + 3; i++) {
             for (int j = initPosY; j < initPosY + 3; j++) {
-                deleteCell(digits, board.getCell(row, column));
+                deleteCellValue(digits, board.getCell(row, column));
             }
         }
         return digits;
     }
 
-    private void deleteCell(List<Integer> numbers, Cell cell) {
+    private void deleteCellValue(List<Integer> numbers, Cell cell) {
         Integer num = cell.getValue();
         if (!cell.isEmpty() && numbers.contains(num)) {
             numbers.remove(numbers.indexOf(num));
@@ -65,13 +65,13 @@ public class PeterNorvig implements Algorithm {
 
     private List<Integer> deleteNumbersInColumn(List<Integer> numbers, int column) {
         for (int row = 0; row < board.getBoardSize(); row++)
-            deleteCell(numbers, board.getCell(row, column));
+            deleteCellValue(numbers, board.getCell(row, column));
         return numbers;
     }
 
     private List<Integer> deleteNumbersInRow(List<Integer> numbers, int row) {
         for (int column = 0; column < board.getBoardSize(); column++)
-            deleteCell(numbers, board.getCell(row, column));
+            deleteCellValue(numbers, board.getCell(row, column));
         return numbers;
     }
 }
