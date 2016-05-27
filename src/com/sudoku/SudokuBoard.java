@@ -72,11 +72,25 @@ public class SudokuBoard {
      * @return A Cell with an zero value or null if there isn't any empty cell
      */
     public Cell getFirstEmptyCell() {
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int column = 0; column < BOARD_SIZE; column++) {
-                if (getCell(row, column).isEmpty()) {
-                    return getCell(row, column);
-                }
+        int row = 0;
+        while (row < BOARD_SIZE) {
+            if( getFirstEmptyCellInRow(row) != null)
+                return getFirstEmptyCellInRow(row);
+            row++;
+        }
+        return null;
+    }
+
+    /**
+     * Get an empty Cell in a row of board
+     *
+     * @param row The row value on the board
+     * @return A Cell with an zero value or null if there isn't any empty cell
+     */
+    public Cell getFirstEmptyCellInRow(int row) {
+        for (int column = 0; column < BOARD_SIZE; column++) {
+            if (getCell(row, column).isEmpty()) {
+                return getCell(row, column);
             }
         }
         return null;
