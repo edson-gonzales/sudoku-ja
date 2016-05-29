@@ -9,7 +9,7 @@ import java.util.Random;
 public class NumberGenerator {
 
     /**
-     * Given there is nine digits from 1 to 9, this method gives one digit randomly
+     * Given there are nine digits from 1 to 9, this method gives one digit randomly
      *
      * @return A digit
      */
@@ -20,7 +20,7 @@ public class NumberGenerator {
     }
 
     /**
-     * Generate a range of numbers between [min... max]
+     * Generate a list of numbers between [min... max]
      *
      * @param max The maximum number
      * @return The list of random numbers generated without repetition

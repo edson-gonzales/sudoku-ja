@@ -64,7 +64,7 @@ public class SudokuGenerator {
     }
 
     /**
-     * Given there is nine sub grids on the board
+     * Given there are nine sub grids on the board
      * numbered from 0 to 8, this method set one cell on each sub grid
      * randomly
      */
@@ -76,7 +76,7 @@ public class SudokuGenerator {
     }
 
     /**
-     * Given there is nine sub grids on the board
+     * Given there are nine sub grids on the board
      * numbered from 0 to 8, this method clear n cells on each sub grid
      * randomly
      */
@@ -88,7 +88,7 @@ public class SudokuGenerator {
     }
 
     /**
-     * Given there is nine cells on a sub grid
+     * Given there are nine cells on a sub grid
      * numbered from 0 to 8, this method gives a group of cell numbers
      * from sub grid according to the size parameter randomly
      *
@@ -99,9 +99,8 @@ public class SudokuGenerator {
         return NumberGenerator.generate(minComplexity, maxComplexity);
     }
 
-
     /**
-     * Given there is nine sub grids on the board
+     * Given there are nine sub grids on the board
      * numbered from 0 to 8, this method sorts the order randomly
      * to start filling them
      *
@@ -154,7 +153,7 @@ public class SudokuGenerator {
     }
 
     /**
-     * Given there is nine cells on a sub grid
+     * Given there are nine cells on a sub grid
      * numbered from 0 to 8, this method gives a group of cell numbers
      * from sub grid according to the size parameter randomly
      *
@@ -168,7 +167,7 @@ public class SudokuGenerator {
     }
 
     /**
-     * Given there is nine cells on a sub grid
+     * Given there are nine cells on a sub grid
      * numbered from 0 to 8, this method gives a group of cell numbers
      * from sub grid according to the size parameter randomly
      *

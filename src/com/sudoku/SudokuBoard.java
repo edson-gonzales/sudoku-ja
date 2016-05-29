@@ -14,16 +14,29 @@ public class SudokuBoard {
 
     private Cell[][] board = new Cell[BOARD_SIZE][BOARD_SIZE];
 
+    /**
+     * Create a SudokuBoard instance from an array numbers
+     *
+     * @param arrayBoard An array of integers
+     */
     public SudokuBoard(int[][] arrayBoard) {
         parseToCells(arrayBoard);
     }
 
+    /**
+     * Create a SudokuBoard instance from an array of cells
+     *
+     * @param board An array of cells
+     */
     public SudokuBoard(Cell[][] board) {
         this.board = board;
     }
 
+    /**
+     * Create a SudokuBoard instance with empty cells
+     */
     public SudokuBoard() {
-        parseToEmptyCells();
+        generateEmptyBoard();
     }
 
     /**
@@ -40,7 +53,11 @@ public class SudokuBoard {
         return isSafeSetCellInColumn && isSafeSetCellInInRow && isSafeSetCellInSubGrid;
     }
 
-
+    /**
+     * Get the size of the board
+     *
+     * @return The size of the array board
+     */
     public int getBoardSize() {
         return BOARD_SIZE;
     }
@@ -59,9 +76,9 @@ public class SudokuBoard {
     }
 
     /**
-     * Convert an array of integers to an array of Cells
+     * Generate a board with empty cells
      */
-    public void parseToEmptyCells() {
+    public void generateEmptyBoard() {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int column = 0; column < BOARD_SIZE; column++) {
                 this.board[row][column] = new Cell(row, column);
@@ -206,7 +223,6 @@ public class SudokuBoard {
         return false;
     }
 
-
     /**
      * Get the initial position of a sub grid according an value
      *
@@ -233,14 +249,16 @@ public class SudokuBoard {
     }
 
     /**
-     * Get the initial cell of a sub grid
+     * Given there are nine sub grids on the board
+     * numbered from 0 to 8, this method gets the first cell on a sub grid
      *
+     * @param num A sub grid number [0 ... 8]
      * @return The init cell on a sub grid
      */
     public Cell getIniCellSubGrid(int num) {
         int row = (num / 3) * 3;
         int col = (num % 3) * 3;
-        //  0  1  2   3  4  5   6  7  8 ---> SubGrid number
+        //  0  1  2   3  4  5   6  7  8 ----> SubGrid number
         // 00 03 06  30 33 36  60 63 66 ----> Cell init position
         int subGridIniRow = getIniPosSubGrid(row);
         int subGridIniCol = getIniPosSubGrid(col);
@@ -248,14 +266,14 @@ public class SudokuBoard {
     }
 
     /**
-     * Get the initial cell of a sub grid
+     * Get the cells on sub grid
      *
-     * @param subGridNumber The subGrid number on the board [0 ... 8]
-     * @return The init cell on a sub grid
+     * @param num A sub grid number [0 ... 8]
+     * @return The list of cells on a sub grid
      */
-    public List<Cell> getSubGridCells(int subGridNumber) {
+    public List<Cell> getSubGridCells(int num) {
         List<Cell> subGrid = new ArrayList<Cell>();
-        Cell initCell = getIniCellSubGrid(subGridNumber);
+        Cell initCell = getIniCellSubGrid(num);
         int iniRow = initCell.getPosX();
         int iniCol = initCell.getPosY();
         for (int row = iniRow; row < iniRow + 3; row++) {

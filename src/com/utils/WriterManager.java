@@ -13,6 +13,11 @@ import java.util.Date;
  */
 public class WriterManager {
 
+    /**
+     * Export a new file with txt extension
+     *
+     * @param str The string that contains the text to be written
+     */
     public static void exportTxtFile(String str) {
         try {
             String folder = "./results";
