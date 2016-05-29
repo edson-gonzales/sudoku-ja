@@ -15,7 +15,6 @@ public class WriterManager {
 
     public static void exportTxtFile(String str) {
         try {
-
             String folder = "./results";
             new File(folder).mkdirs();
 

@@ -3,6 +3,7 @@ package com.sudoku;
 import com.algorithm.Algorithm;
 import com.algorithm.Backtracking;
 import com.algorithm.PeterNorvig;
+import com.utils.SudokuGenerator;
 import com.utils.WriterManager;
 
 import java.io.File;
@@ -65,8 +66,17 @@ public class Main {
 //        7 4 5 2 8 6 3 1 9
 
         SudokuBoard sudokuBoard = new SudokuBoard();
-        sudokuBoard.generateSudokuBoard(4);
+//        sudokuBoard = SudokuGenerator.generate(4);
+//        sudokuBoard.generateSudokuBoard(4);
+//        sudokuBoard = SudokuGenerator.generateEasy();
+//        System.out.println(sudokuBoard.toString());
+//
+        sudokuBoard = SudokuGenerator.generateHard();
         System.out.println(sudokuBoard.toString());
+
+//        sudokuBoard = SudokuGenerator.generateEasy();
+//        System.out.println(sudokuBoard.toString());
+
         Algorithm backtracking = new Backtracking();
         Boolean isSolved = backtracking.solve(sudokuBoard);
 

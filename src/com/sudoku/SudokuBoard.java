@@ -1,11 +1,7 @@
 package com.sudoku;
 
-import com.algorithm.Algorithm;
-import com.algorithm.Backtracking;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * This class represent the Sudoku board
@@ -15,10 +11,6 @@ import java.util.Random;
  */
 public class SudokuBoard {
     private static int BOARD_SIZE = 9;
-
-    private static int EASY_LEVEL = 5;
-    private static int MEDIUM_LEVEL = 4;
-    private static int HARD_LEVEL = 2;
 
     private Cell[][] board = new Cell[BOARD_SIZE][BOARD_SIZE];
 
@@ -34,64 +26,6 @@ public class SudokuBoard {
         parseToEmptyCells();
     }
 
-    public void generateSudokuBoard(int complexity) {
-        parseToEmptyCells();
-        ArrayList<Integer> subGridOrder = generateNumbersWithoutRepetitions(0, 8, 9);
-
-        for (Integer subGrid : subGridOrder) {
-            fillSubGridWithDigits(subGrid, 1);
-        }
-
-        Algorithm backtracking = new Backtracking();
-        backtracking.solve(this);
-
-        subGridOrder = generateNumbersWithoutRepetitions(0, 8, 9);
-
-        ArrayList<Integer> complexityRange = generateNumbers(2, complexity, 9);
-
-        int complex = 0;
-        for (Integer subGrid : subGridOrder) {
-            fillSubGridWithZeros(subGrid, complexityRange.get(complex));
-            complex++;
-        }
-    }
-
-
-    /**
-     * Fill a sub grid on the board with digits at least one digit set on it
-     *
-     * @param subGrid    The subGrid on the board
-     * @param complexity The number of digits to be set on subGrid
-     */
-    public void fillSubGridWithDigits(int subGrid, int complexity) {
-        ArrayList<Integer> randomCell = generateNumbersWithoutRepetitions(0, 8, complexity);
-        ArrayList<Integer> randomDigits = generateNumbersWithoutRepetitions(1, 9, complexity);
-        int minSetters = 0;
-        int digit = 0;
-        List<Cell> subGridCells = getSubGrid(subGrid);
-        for (Integer cellPos : randomCell) {
-            Cell cell = subGridCells.get(cellPos);
-            Integer value = randomDigits.get(digit);
-            if (isSaveSetCell(cell, value)) {
-                setCell(cell, value);
-                minSetters++;
-            }
-            digit++;
-        }
-        if (minSetters == 0) {
-            fillSubGridWithDigits(subGrid, complexity);
-        }
-    }
-
-    public void fillSubGridWithZeros(int subGrid, int complexity) {
-        ArrayList<Integer> randomCell = generateNumbersWithoutRepetitions(0, 8, complexity);
-        List<Cell> subGridCells = getSubGrid(subGrid);
-        for (Integer cellPos : randomCell) {
-            Cell cell = subGridCells.get(cellPos);
-            setCell(cell, 0);
-        }
-    }
-
     /**
      * Verify if a num is can be set in a cell on the board
      *
@@ -99,46 +33,13 @@ public class SudokuBoard {
      * @param num  A digit number
      * @return Return true if the num is not used in row, column and sub grid
      */
-    public Boolean isSaveSetCell(Cell cell, int num) {
-        Boolean isPracticableInColumn = !isNumUsedInColumnCell(cell, num);
-        Boolean isPracticableInRow = !isNumUsedInCellRow(cell, num);
-        Boolean isPracticableInSubGrid = !isNumUsedInSubGrid(cell, num);
-        return isPracticableInColumn && isPracticableInRow && isPracticableInSubGrid;
+    public Boolean isSafeSetCell(Cell cell, int num) {
+        Boolean isSafeSetCellInColumn = !isNumUsedInColumnCell(cell, num);
+        Boolean isSafeSetCellInInRow = !isNumUsedInCellRow(cell, num);
+        Boolean isSafeSetCellInSubGrid = !isNumUsedInSubGrid(cell, num);
+        return isSafeSetCellInColumn && isSafeSetCellInInRow && isSafeSetCellInSubGrid;
     }
 
-    /**
-     * Generate a range of numbers between [min... max]
-     *
-     * @param max The maximum number
-     * @return The list of random numbers generated without repetition
-     */
-    public static ArrayList<Integer> generateNumbersWithoutRepetitions(int min, int max, int size) {
-        ArrayList<Integer> numbers = new ArrayList<Integer>();
-        Random randomGenerator = new Random();
-        while (numbers.size() < size) {
-            int random = randomGenerator.nextInt((max - min) + 1) + min;
-            if (!numbers.contains(random)) {
-                numbers.add(random);
-            }
-        }
-        return numbers;
-    }
-
-    /**
-     * Generate a range of numbers between [min... max]
-     *
-     * @param max The maximum number
-     * @return The list of random numbers generated
-     */
-    public static ArrayList<Integer> generateNumbers(int min, int max, int size) {
-        ArrayList<Integer> numbers = new ArrayList<Integer>();
-        Random randomGenerator = new Random();
-        while (numbers.size() < size) {
-            int random = randomGenerator.nextInt((max - min) + 1) + min;
-            numbers.add(random);
-        }
-        return numbers;
-    }
 
     public int getBoardSize() {
         return BOARD_SIZE;
@@ -349,11 +250,12 @@ public class SudokuBoard {
     /**
      * Get the initial cell of a sub grid
      *
+     * @param subGridNumber The subGrid number on the board [0 ... 8]
      * @return The init cell on a sub grid
      */
-    public List<Cell> getSubGrid(int num) {
+    public List<Cell> getSubGridCells(int subGridNumber) {
         List<Cell> subGrid = new ArrayList<Cell>();
-        Cell initCell = getIniCellSubGrid(num);
+        Cell initCell = getIniCellSubGrid(subGridNumber);
         int iniRow = initCell.getPosX();
         int iniCol = initCell.getPosY();
         for (int row = iniRow; row < iniRow + 3; row++) {
@@ -377,7 +279,7 @@ public class SudokuBoard {
         return board.toString();
     }
 
-    public StringBuilder appendRow(int row, StringBuilder board){
+    public StringBuilder appendRow(int row, StringBuilder board) {
         int col = 0;
         while (col < BOARD_SIZE) {
             int i;
@@ -390,7 +292,7 @@ public class SudokuBoard {
         return board.append("\n");
     }
 
-    public StringBuilder appendCell(Cell cell, StringBuilder board){
+    public StringBuilder appendCell(Cell cell, StringBuilder board) {
         if (cell.isEmpty()) {
             board.append(". ");
         } else {

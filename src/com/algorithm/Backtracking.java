@@ -40,7 +40,7 @@ public class Backtracking implements Algorithm {
      * @return Return true if there is a solution
      */
     private boolean isNumSetAsSolution(Cell cell, int num) {
-        if (this.board.isSaveSetCell(cell, num)) {
+        if (this.board.isSafeSetCell(cell, num)) {
             this.board.setCell(cell, num);
             if (solve(this.board)) {
                 return true;
