@@ -202,26 +202,34 @@ public class SudokuBoard {
     public String toString() {
         String line = "------+-------+--------";
         StringBuilder board = new StringBuilder();
-
         for (int row = 0; row < BOARD_SIZE; row++) {
             if (row != 0 && row % 3 == 0) {
                 board.append(line).append("\n");
             }
-            int col = 0;
-            while (col < BOARD_SIZE) {
-                int i;
-                for (i = col; i < col + 3; i++) {
-                    if (getCell(row, i).isEmpty()) {
-                        board.append(". ");
-                    } else {
-                        board.append(getCell(row, i).getValue()).append(" ");
-                    }
-                }
-                board.append("|").append(" ");
-                col = i;
-            }
-            board.append("\n");
+            appendRow(row, board);
         }
         return board.toString();
+    }
+
+    public StringBuilder appendRow(int row, StringBuilder board){
+        int col = 0;
+        while (col < BOARD_SIZE) {
+            int i;
+            for (i = col; i < col + 3; i++) {
+                appendCell(getCell(row, i), board);
+            }
+            board.append("| ");
+            col = i;
+        }
+        return board.append("\n");
+    }
+
+    public StringBuilder appendCell(Cell cell, StringBuilder board){
+        if (cell.isEmpty()) {
+            board.append(". ");
+        } else {
+            board.append(cell.getValue()).append(" ");
+        }
+        return board;
     }
 }
