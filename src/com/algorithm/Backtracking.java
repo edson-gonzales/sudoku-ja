@@ -40,7 +40,7 @@ public class Backtracking implements Algorithm {
      * @return Return true if there is a solution
      */
     private boolean isNumSetAsSolution(Cell cell, int num) {
-        if (isPracticable(cell, num)) {
+        if (this.board.isSaveSetCell(cell, num)) {
             this.board.setCell(cell, num);
             if (solve(this.board)) {
                 return true;
@@ -48,19 +48,5 @@ public class Backtracking implements Algorithm {
             this.board.clearCell(cell);
         }
         return false;
-    }
-
-    /**
-     * Verify if a num is practicable to set in a cell on the board
-     *
-     * @param cell A Cell object on the board
-     * @param num    A digit number
-     * @return Return true if the num is practicable in row, column and sub grid
-     */
-    public Boolean isPracticable(Cell cell, int num) {
-        Boolean isPracticableInColumn = !this.board.isNumUsedInColumnCell(cell, num);
-        Boolean isPracticableInRow = !this.board.isNumUsedInCellRow(cell, num);
-        Boolean isPracticableInSubGrid = !this.board.isNumUsedInSubGrid(cell, num);
-        return isPracticableInColumn && isPracticableInRow && isPracticableInSubGrid;
     }
 }
