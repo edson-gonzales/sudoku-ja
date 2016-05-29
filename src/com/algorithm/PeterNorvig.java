@@ -11,34 +11,31 @@ import java.util.List;
  * This class represent the Peter Norvig's algorithm
  */
 public class PeterNorvig implements Algorithm {
-    private SudokuBoard sudokuBoard;
+    private SudokuBoard board;
 
     /**
-     * Solve a sudoku sudokuBoard game
+     * Solve a sudoku board game
      *
-     * @param sudokuBoard The sudoku sudokuBoard of cells
+     * @param sudokuBoard The sudoku board of cells
      * @return The condition of game result
      */
     @Override
     public Boolean solve(SudokuBoard sudokuBoard) {
-        this.sudokuBoard = sudokuBoard;
+        this.board = sudokuBoard;
 
-        Cell emptyCell = this.sudokuBoard.getFirstEmptyCell();
-
-        if (emptyCell == null) {
+        if (!this.board.hasAnEmptyCell()) {
             return true;
         }
 
-        int row = emptyCell.getPosX();
-        int column = emptyCell.getPosY();
+        Cell cell = this.board.getFirstEmptyCell();
 
-        for (Integer num : getNumbersForCell(row, column)) {
-            this.sudokuBoard.getCell(row, column).setValue(num);
-            if (solve(this.sudokuBoard))
+        for (Integer num : getNumbersForCell(cell)) {
+            this.board.setCell(cell, num);
+            if (solve(this.board))
                 return true;
         }
 
-        this.sudokuBoard.clearCell(row, column);
+        this.board.clearCell(cell);
 
         return false;
     }
@@ -46,15 +43,14 @@ public class PeterNorvig implements Algorithm {
     /**
      * Get the possible numbers to set in a cell on the board
      *
-     * @param row    The row position in the board
-     * @param column The column position in the board
+     * @param cell A Cell object on the board
      * @return Return a list of the possible numbers to be set
      */
-    public List<Integer> getNumbersForCell(int row, int column) {
+    public List<Integer> getNumbersForCell(Cell cell) {
         List<Integer> numbers = new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
-        numbers = deleteNumbersInRow(numbers, row);
-        numbers = deleteNumbersInColumn(numbers, column);
-        numbers = deleteNumbersInSubGrid(numbers, row, column);
+        numbers = deleteNumbersInRow(numbers, cell);
+        numbers = deleteNumbersInColumn(numbers, cell);
+        numbers = deleteNumbersInSubGrid(numbers, cell);
         return numbers;
     }
 
@@ -63,16 +59,16 @@ public class PeterNorvig implements Algorithm {
      * according to the numbers on its sub grid
      *
      * @param numbers The list of numbers
-     * @param row     The row position in the board
-     * @param column  The column position in the board
+     * @param cell    A Cell object on the board
      * @return Return a list of numbers that are not in the sub grid
      */
-    private List<Integer> deleteNumbersInSubGrid(List<Integer> numbers, int row, int column) {
-        int initPosX = SudokuBoard.getIniPosSubGrid(row);
-        int initPosY = SudokuBoard.getIniPosSubGrid(column);
-        for (int i = initPosX; i < initPosX + 3; i++) {
-            for (int j = initPosY; j < initPosY + 3; j++) {
-                deleteCellValue(numbers, this.sudokuBoard.getCell(row, column));
+    private List<Integer> deleteNumbersInSubGrid(List<Integer> numbers, Cell cell) {
+        Cell iniCell = this.board.getIniCellSubGrid(cell);
+        int initPosX = iniCell.getPosX();
+        int initPosY = iniCell.getPosY();
+        for (int row = initPosX; row < initPosX + 3; row++) {
+            for (int column = initPosY; column < initPosY + 3; column++) {
+                deleteCellValue(numbers, this.board.getCell(row, column));
             }
         }
         return numbers;
@@ -82,7 +78,7 @@ public class PeterNorvig implements Algorithm {
      * Delete a number on the list according to the value of a cell
      *
      * @param numbers The list of numbers
-     * @param cell    A Cell on the board
+     * @param cell    A Cell object on the board
      */
     private void deleteCellValue(List<Integer> numbers, Cell cell) {
         Integer num = cell.getValue();
@@ -96,12 +92,13 @@ public class PeterNorvig implements Algorithm {
      * according to the numbers on its column
      *
      * @param numbers The list of numbers
-     * @param column  The column position in the board
+     * @param cell    A Cell object on the board
      * @return Return a list of numbers that are not in the sub grid
      */
-    private List<Integer> deleteNumbersInColumn(List<Integer> numbers, int column) {
-        for (int row = 0; row < this.sudokuBoard.getBoardSize(); row++)
-            deleteCellValue(numbers, this.sudokuBoard.getCell(row, column));
+    private List<Integer> deleteNumbersInColumn(List<Integer> numbers, Cell cell) {
+        int column = cell.getPosY();
+        for (int row = 0; row < this.board.getBoardSize(); row++)
+            deleteCellValue(numbers, this.board.getCell(row, column));
         return numbers;
     }
 
@@ -110,12 +107,13 @@ public class PeterNorvig implements Algorithm {
      * according to the numbers on its row
      *
      * @param numbers The list of numbers
-     * @param row     The row position in the board
+     * @param cell    A Cell object on the board
      * @return Return a list of numbers that are not in the row
      */
-    private List<Integer> deleteNumbersInRow(List<Integer> numbers, int row) {
-        for (int column = 0; column < this.sudokuBoard.getBoardSize(); column++)
-            deleteCellValue(numbers, this.sudokuBoard.getCell(row, column));
+    private List<Integer> deleteNumbersInRow(List<Integer> numbers, Cell cell) {
+        Integer row = cell.getPosX();
+        for (int column = 0; column < this.board.getBoardSize(); column++)
+            deleteCellValue(numbers, this.board.getCell(row, column));
         return numbers;
     }
 }
