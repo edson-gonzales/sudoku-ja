@@ -31,20 +31,20 @@ public class SudokuGenerator {
         levels.put(Level.HARD, 7);   // max 7 empty cells per sub grid
     }
 
-    public static SudokuBoard generateEasy() {
-        return generate(levels.get(Level.EASY));
+    public static void generateEasy() {
+        generate(levels.get(Level.EASY));
     }
 
-    public static SudokuBoard generateMedium() {
-        return generate(levels.get(Level.MEDIUM));
+    public static void generateMedium() {
+        generate(levels.get(Level.MEDIUM));
     }
 
-    public static SudokuBoard generateHard() {
-        return generate(levels.get(Level.HARD));
+    public static void generateHard() {
+        generate(levels.get(Level.HARD));
     }
 
-    private static SudokuBoard generate(Level level) {
-        return generate(levels.get(level));
+    private static void generate(Level level) {
+        generate(levels.get(level));
     }
 
     /**
@@ -53,14 +53,15 @@ public class SudokuGenerator {
      * @param complexity The max empty cells per subGrid
      * @return The sudoku board generated
      */
-    public static SudokuBoard generate(int complexity) {
+    public static void generate(int complexity) {
         setOneCellOnSubGrids();
 
         Algorithm backtracking = new Backtracking();
         backtracking.solve(board);
 
         clearNCellsOnSubGrids(complexity);
-        return board;
+
+        exportSudokuGame();
     }
 
     /**
@@ -177,5 +178,12 @@ public class SudokuGenerator {
         int iniCell = 0;
         int endCell = 8;
         return NumberGenerator.generate(iniCell, endCell);
+    }
+
+    /**
+     * Export sudoku game generated to an txt file
+     */
+    private static void exportSudokuGame(){
+        WriterManager.exportTxtFile(board.toString());
     }
 }
