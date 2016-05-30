@@ -7,9 +7,7 @@ import com.sudoku.SudokuBoard;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Class that represent the Sudoku Generator class
