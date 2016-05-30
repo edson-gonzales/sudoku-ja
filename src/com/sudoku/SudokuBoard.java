@@ -40,7 +40,7 @@ public class SudokuBoard {
     }
 
     /**
-     * Verify if a num is can be set in a cell on the board
+     * Verify if a num can be set in a cell on the board
      *
      * @param cell A Cell object on the board
      * @param num  A digit number
