@@ -5,6 +5,7 @@ import com.algorithm.Backtracking;
 import com.sudoku.Cell;
 import com.sudoku.SudokuBoard;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,36 +18,6 @@ public class SudokuGenerator {
 
     private static SudokuBoard board = new SudokuBoard();
 
-    public enum Level {
-        EASY,
-        MEDIUM,
-        HARD
-    }
-
-    public static Map<Level, Integer> levels = new HashMap<Level, Integer>();
-
-    static {
-        levels.put(Level.EASY, 3);   // max 3 empty cells per sub grid
-        levels.put(Level.MEDIUM, 5); // max 5 empty cells per sub grid
-        levels.put(Level.HARD, 7);   // max 7 empty cells per sub grid
-    }
-
-    public static void generateEasy() {
-        generate(levels.get(Level.EASY));
-    }
-
-    public static void generateMedium() {
-        generate(levels.get(Level.MEDIUM));
-    }
-
-    public static void generateHard() {
-        generate(levels.get(Level.HARD));
-    }
-
-    private static void generate(Level level) {
-        generate(levels.get(level));
-    }
-
     /**
      * Generate a board according to a complexity
      *
@@ -57,7 +28,9 @@ public class SudokuGenerator {
         setOneCellOnSubGrids();
 
         Algorithm backtracking = new Backtracking();
-        backtracking.solve(board);
+
+        if (!backtracking.solve(board))
+            generate(complexity);
 
         clearNCellsOnSubGrids(complexity);
 
@@ -80,6 +53,8 @@ public class SudokuGenerator {
      * Given there are nine sub grids on the board
      * numbered from 0 to 8, this method clear n cells on each sub grid
      * randomly
+     *
+     * @param complexity The max empty cells per subGrid
      */
     public static void clearNCellsOnSubGrids(int complexity) {
         ArrayList<Integer> subGridOrder = getSubGridsOrder();
@@ -89,14 +64,15 @@ public class SudokuGenerator {
     }
 
     /**
-     * Given there are nine cells on a sub grid
-     * numbered from 0 to 8, this method gives a group of cell numbers
-     * from sub grid according to the size parameter randomly
+     * Get a complexity between a range
+     * where the minimum is calculated 2 cells minus from the maximum
      *
+     * @param maxComplexity The max empty cells per subGrid
      * @return The cell number randomly
      */
     private static int getComplexity(int maxComplexity) {
-        int minComplexity = maxComplexity - 2;
+        int decrease = 2;
+        int minComplexity = maxComplexity - decrease;
         return NumberGenerator.generate(minComplexity, maxComplexity);
     }
 
@@ -123,19 +99,13 @@ public class SudokuGenerator {
         List<Cell> subGridCells = board.getSubGridCells(subGridNumber);
 
         int cellNumber = getSubGridCellNumber();
-        int minSetters = 0;
 
         Cell cell = subGridCells.get(cellNumber);
         Integer value = NumberGenerator.getADigit();
 
-        if (board.isSafeSetCell(cell, value)) {
+        if (board.isSafeSetCell(cell, value))
             board.setCell(cell, value);
-            minSetters++;
-        }
 
-        if (minSetters == 0) {
-            setOneCellOnSubGrid(subGridNumber);
-        }
     }
 
     /**
@@ -183,7 +153,11 @@ public class SudokuGenerator {
     /**
      * Export sudoku game generated to an txt file
      */
-    private static void exportSudokuGame(){
-        WriterManager.exportTxtFile(board.toString());
+    private static void exportSudokuGame() {
+        try {
+            WriterManager.exportTxtFile(board.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

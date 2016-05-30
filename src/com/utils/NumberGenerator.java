@@ -23,6 +23,8 @@ public class NumberGenerator {
      * Generate a list of numbers between [min... max]
      *
      * @param max The maximum number
+     * @param min The minimum number
+     * @param size The size of array list
      * @return The list of random numbers generated without repetition
      */
     public static ArrayList<Integer> generate(int min, int max, int size) {
