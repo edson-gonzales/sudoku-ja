@@ -258,8 +258,6 @@ public class SudokuBoard {
     public Cell getIniCellSubGrid(int num) {
         int row = (num / 3) * 3;
         int col = (num % 3) * 3;
-        //  0  1  2   3  4  5   6  7  8 ----> SubGrid number
-        // 00 03 06  30 33 36  60 63 66 ----> Cell init position
         int subGridIniRow = getIniPosSubGrid(row);
         int subGridIniCol = getIniPosSubGrid(col);
         return getCell(subGridIniRow, subGridIniCol);
