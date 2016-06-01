@@ -32,9 +32,9 @@ public class SudokuReader {
         String parsedText = read().replace(",", "");
         int iterator = 0;
         int[][] grid = new int[BOARD_SIZE][BOARD_SIZE];
-        for (int col = 0; col < BOARD_SIZE; col++) {
-            for (int row = 0; row < BOARD_SIZE; row++) {
-                grid[col][row] = parsedText.charAt(iterator) - ASCCI_ZERO;
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                grid[row][col] = parsedText.charAt(iterator) - ASCCI_ZERO;
                 iterator++;
             }
         }
@@ -46,7 +46,7 @@ public class SudokuReader {
      *
      * @return text obtained from file
      */
-    public String read() {
+    private String read() {
         String text = "";
         try {
             scanner = new Scanner(file);

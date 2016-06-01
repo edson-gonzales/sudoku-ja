@@ -7,7 +7,7 @@ package com.sudoku;
  * @author Jose Cabrera
  */
 public class SudokuBoard {
-    private static int BOARD_SIZE = 9;
+    public static final int BOARD_SIZE = 9;
     private Cell[][] board = new Cell[BOARD_SIZE][BOARD_SIZE];
 
     public SudokuBoard(int[][] arrayBoard) {
