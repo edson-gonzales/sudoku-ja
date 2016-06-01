@@ -1,6 +1,6 @@
 import com.readers.SudokuReader;
 import com.sudoku.SudokuBoard;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -9,13 +9,6 @@ import org.junit.Test;
  * @author Jose Cabrera
  */
 public class SudokuReaderTest {
-
-    @Test
-    public void readTxtFile() {
-        String txtContent = "400000805030000000000700000020000060000080400000010000000603070500200000104000000";
-        SudokuReader readerTxt = new SudokuReader("./test.txt");
-        Assert.assertEquals("The content is the same", txtContent, readerTxt.read());
-    }
 
     @Test
     public void getSudokuFromTxtFile() {
@@ -32,13 +25,6 @@ public class SudokuReaderTest {
         SudokuBoard sudokuBoard = new SudokuBoard(grid);
         Assert.assertEquals("The SudokuBoard is the same", sudokuBoard.toString(),
                 readerTxt.getSudokuBoard().toString());
-    }
-
-    @Test
-    public void readCsvFile() {
-        String txtContent = "003020600,900305001,001806400,008102900,700000008,006708200,002609500,800203009,005010300";
-        SudokuReader readerCsv = new SudokuReader("./test.csv");
-        Assert.assertEquals("The content is the same", txtContent, readerCsv.read());
     }
 
     @Test
