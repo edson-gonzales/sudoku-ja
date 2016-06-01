@@ -17,20 +17,21 @@ public class SudokuGenerator {
     private static SudokuBoard board = new SudokuBoard();
 
     /**
-     * Generate a board according to a complexity
+     * Generate a board according to a complexity range
      *
-     * @param complexity The max empty cells per subGrid
+     * @param minComplexity The min empty cells per subGrid
+     * @param maxComplexity The max empty cells per subGrid
      * @return The sudoku board generated
      */
-    public static void generate(int complexity) {
+    public static void generate(int minComplexity, int maxComplexity) {
         setOneCellOnSubGrids();
 
         Algorithm backtracking = new Backtracking();
 
         if (!backtracking.solve(board))
-            generate(complexity);
+            generate(minComplexity, maxComplexity);
 
-        clearNCellsOnSubGrids(complexity);
+        clearNCellsOnSubGrids(minComplexity, maxComplexity);
 
         exportSudokuGame();
     }
@@ -52,12 +53,13 @@ public class SudokuGenerator {
      * numbered from 0 to 8, this method clear n cells on each sub grid
      * randomly
      *
-     * @param complexity The max empty cells per subGrid
+     * @param minComplexity The min empty cells per subGrid
+     * @param maxComplexity The max empty cells per subGrid
      */
-    public static void clearNCellsOnSubGrids(int complexity) {
+    public static void clearNCellsOnSubGrids(int minComplexity, int maxComplexity) {
         ArrayList<Integer> subGridOrder = getSubGridsOrder();
         for (Integer subGrid : subGridOrder) {
-            clearNCellsOnSubGrid(subGrid, getComplexity(complexity));
+            clearNCellsOnSubGrid(subGrid, getComplexity(minComplexity, maxComplexity));
         }
     }
 
@@ -65,12 +67,11 @@ public class SudokuGenerator {
      * Get a complexity between a range
      * where the minimum is calculated 2 cells minus from the maximum
      *
+     * @param minComplexity The min empty cells per subGrid
      * @param maxComplexity The max empty cells per subGrid
      * @return The cell number randomly
      */
-    private static int getComplexity(int maxComplexity) {
-        int decrease = 2;
-        int minComplexity = maxComplexity - decrease;
+    private static int getComplexity(int minComplexity, int maxComplexity) {
         return NumberGenerator.generate(minComplexity, maxComplexity);
     }
 
