@@ -97,7 +97,7 @@ public class PeterNorvig implements Algorithm {
      */
     private List<Integer> deleteNumbersInColumn(List<Integer> numbers, Cell cell) {
         int column = cell.getPosY();
-        for (int row = 0; row < this.board.getBoardSize(); row++)
+        for (int row = 0; row < SudokuBoard.SIZE; row++)
             deleteCellValue(numbers, this.board.getCell(row, column));
         return numbers;
     }
@@ -112,7 +112,7 @@ public class PeterNorvig implements Algorithm {
      */
     private List<Integer> deleteNumbersInRow(List<Integer> numbers, Cell cell) {
         Integer row = cell.getPosX();
-        for (int column = 0; column < this.board.getBoardSize(); column++)
+        for (int column = 0; column < SudokuBoard.SIZE; column++)
             deleteCellValue(numbers, this.board.getCell(row, column));
         return numbers;
     }

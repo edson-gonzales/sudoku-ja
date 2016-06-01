@@ -16,7 +16,7 @@ public class SudokuReader {
     protected String filePath;
     protected Scanner scanner = null;
     public static final int ASCCI_ZERO = "0".charAt(0);
-    private static int BOARD_SIZE = 9;
+    private static int BOARD_SIZE = SudokuBoard.SIZE;
     private File file;
     public SudokuReader(String filePath) {
         this.filePath = filePath;
