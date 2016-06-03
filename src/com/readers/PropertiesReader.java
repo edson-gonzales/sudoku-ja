@@ -1,27 +1,12 @@
 package com.readers;
 
+import com.utils.PropertiesWriter.CONFIG;
+
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 public class PropertiesReader {
     File file = new File("config.properties");
-    public enum CONFIG {
-        ALGORITHM,
-        OUTPUT_PATH,
-        OUTPUT_FILE_NAME,
-        LEVEL
-    }
-
-    protected static final Map<CONFIG, String> CONFIG_MAP = new HashMap<>();
-
-    static {
-        CONFIG_MAP.put(CONFIG.ALGORITHM, "algorithm");
-        CONFIG_MAP.put(CONFIG.OUTPUT_PATH, "OutputPath");
-        CONFIG_MAP.put(CONFIG.OUTPUT_FILE_NAME, "OutputFileName");
-        CONFIG_MAP.put(CONFIG.LEVEL,"Level");
-    }
 
 
     public PropertiesReader(){
@@ -31,11 +16,11 @@ public class PropertiesReader {
     public void read(){
 
         Properties prop = new Properties();
-        InputStream output = null;
+        InputStream input = null;
 
         try {
 
-            output = new FileInputStream("config.properties");
+            input = new FileInputStream("config.properties");
 
             // set the properties value
             prop.setProperty(CONFIG.ALGORITHM.name(), "localhost");
@@ -46,14 +31,18 @@ public class PropertiesReader {
         } catch (IOException io) {
             io.printStackTrace();
         } finally {
-            if (output != null) {
+            if (input != null) {
                 try {
-                    output.close();
+                    input.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
         }
+    }
+
+    public static void main(String[] args) {
+
     }
 }

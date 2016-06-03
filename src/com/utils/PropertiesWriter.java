@@ -4,62 +4,87 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 public class PropertiesWriter {
     private OutputStream output = null;
-    File file = new File("config.properties");
+    private Properties prop = new Properties();
+    private static final String CONFIG_PATH = "./config.properties";
+    private File file;
+
     public enum CONFIG {
-        ALGORITHM,
-        OUTPUT_PATH,
-        OUTPUT_FILE_NAME,
-        LEVEL
+        ALGORITHM("algorithm"),
+        OUTPUT_PATH("outputPath"),
+        OUTPUT_FILE_NAME("outputFileName"),
+        LEVEL("level");
+
+        private String name;
+
+        private CONFIG(String name) {
+            this.name = name;
+        }
+
+        public String toString() {
+            return name;
+        }
     }
 
-    protected static final Map<CONFIG, String> CONFIG_MAP = new HashMap<>();
-
-    static {
-        CONFIG_MAP.put(CONFIG.ALGORITHM, "algorithm");
-        CONFIG_MAP.put(CONFIG.OUTPUT_PATH, "OutputPath");
-        CONFIG_MAP.put(CONFIG.OUTPUT_FILE_NAME, "OutputFileName");
-        CONFIG_MAP.put(CONFIG.LEVEL,"Level");
+    public PropertiesWriter() {
+        file = new File(CONFIG_PATH);
+        if (!file.exists()) {
+            createConfig();
+        }
     }
 
-
-    public PropertiesWriter(){
-
-    }
-
-
-    public void write() {
-        Properties prop = new Properties();
-
+    /**
+     * Configure the default values in
+     * properties file
+     */
+    public void createConfig() {
         try {
-
-            output = new FileOutputStream("config.properties");
-
-            // set the properties value
-            prop.setProperty(CONFIG.ALGORITHM.name(), "localhost");
-            prop.setProperty(CONFIG.OUTPUT_PATH.name(), "mkyong");
-            prop.setProperty(CONFIG.OUTPUT_FILE_NAME.name(), "password");
-            prop.setProperty(CONFIG.LEVEL.name(), "mkyong");
-
+            output = new FileOutputStream(CONFIG_PATH);
+            prop.setProperty(CONFIG.ALGORITHM.toString(), "Backtracking");
+            prop.setProperty(CONFIG.OUTPUT_PATH.toString(), "./");
+            prop.setProperty(CONFIG.OUTPUT_FILE_NAME.toString(), "outpathFile");
+            prop.setProperty(CONFIG.LEVEL.toString(), "easy");
             // save properties to project root folder
             prop.store(output, null);
-
-        } catch (IOException io) {
-            io.printStackTrace();
-        } finally {
-            if (output != null) {
-                try {
-                    output.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
+    }
+
+    /**
+     * Verify if the file not is null and close the writer
+     */
+    public void closeWriter() {
+        if (output != null) {
+            try {
+                output.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Configure the default values in
+     * properties file
+     */
+    public void setProperty(String key, String value) {
+        try {
+            prop.clear();
+            prop.setProperty(key, value);
+            prop.store(output, null);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        PropertiesWriter propertiesWriter = new PropertiesWriter();
+        propertiesWriter.setProperty(CONFIG.ALGORITHM.toString(), "Peter Norvig");
+        propertiesWriter.setProperty(CONFIG.LEVEL.toString(), "medium");
+        propertiesWriter.closeWriter();
     }
 }
