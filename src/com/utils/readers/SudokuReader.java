@@ -1,11 +1,11 @@
-package com.readers;
+package com.utils.readers;
 
 import com.sudoku.SudokuBoard;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-import org.apache.log4j.Logger;
 
 
 /**
