@@ -4,6 +4,7 @@ import com.algorithm.Algorithm;
 import com.algorithm.Backtracking;
 import com.sudoku.Cell;
 import com.sudoku.SudokuBoard;
+import com.utils.writers.WriterManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
