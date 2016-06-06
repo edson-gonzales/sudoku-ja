@@ -10,9 +10,9 @@ import java.util.List;
  * @author Jose Cabrera
  */
 public class SudokuBoard {
-    private static int BOARD_SIZE = 9;
+    public static int SIZE = 9;
 
-    private Cell[][] board = new Cell[BOARD_SIZE][BOARD_SIZE];
+    private Cell[][] board = new Cell[SIZE][SIZE];
 
     /**
      * Create a SudokuBoard instance from an array numbers
@@ -54,22 +54,13 @@ public class SudokuBoard {
     }
 
     /**
-     * Get the size of the board
-     *
-     * @return The size of the array board
-     */
-    public int getBoardSize() {
-        return BOARD_SIZE;
-    }
-
-    /**
      * Convert an array of integers to an array of Cells
      *
      * @param arrayBoard An array of integers
      */
     public void parseToCells(int[][] arrayBoard) {
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int column = 0; column < BOARD_SIZE; column++) {
+        for (int row = 0; row < SIZE; row++) {
+            for (int column = 0; column < SIZE; column++) {
                 this.board[row][column] = new Cell(row, column, arrayBoard[row][column]);
             }
         }
@@ -79,8 +70,8 @@ public class SudokuBoard {
      * Generate a board with empty cells
      */
     public void generateEmptyBoard() {
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int column = 0; column < BOARD_SIZE; column++) {
+        for (int row = 0; row < SIZE; row++) {
+            for (int column = 0; column < SIZE; column++) {
                 this.board[row][column] = new Cell(row, column);
             }
         }
@@ -132,7 +123,7 @@ public class SudokuBoard {
      * @return A Cell with an zero value or null if there isn't any empty cell
      */
     public Cell getFirstEmptyCell() {
-        for (int row = 0; row < BOARD_SIZE; row++) {
+        for (int row = 0; row < SIZE; row++) {
             if (getFirstEmptyCellInRow(row) != null)
                 return getFirstEmptyCellInRow(row);
         }
@@ -146,7 +137,7 @@ public class SudokuBoard {
      * @return A Cell with an zero value or null if there isn't any empty cell
      */
     public Cell getFirstEmptyCellInRow(int row) {
-        for (int column = 0; column < BOARD_SIZE; column++) {
+        for (int column = 0; column < SIZE; column++) {
             if (getCell(row, column).isEmpty()) {
                 return getCell(row, column);
             }
@@ -163,7 +154,7 @@ public class SudokuBoard {
      */
     public boolean isNumUsedInColumnCell(Cell cell, int num) {
         int column = cell.getPosY();
-        for (int row = 0; row < BOARD_SIZE; row++) {
+        for (int row = 0; row < SIZE; row++) {
             if (getCell(row, column).hasValue(num)) {
                 return true;
             }
@@ -180,7 +171,7 @@ public class SudokuBoard {
      */
     public boolean isNumUsedInCellRow(Cell cell, int num) {
         int row = cell.getPosX();
-        for (int col = 0; col < BOARD_SIZE; col++) {
+        for (int col = 0; col < SIZE; col++) {
             if (getCell(row, col).hasValue(num)) {
                 return true;
             }
@@ -299,7 +290,7 @@ public class SudokuBoard {
 
     public StringBuilder appendRow(int row, StringBuilder board) {
         int col = 0;
-        while (col < BOARD_SIZE) {
+        while (col < SIZE) {
             int i;
             for (i = col; i < col + 3; i++) {
                 appendCell(getCell(row, i), board);
