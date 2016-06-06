@@ -45,14 +45,13 @@ public class Game {
         Scanner input = new Scanner(System.in);
         do {
             System.out.println("Press 0 to back to Menu");
-            System.out.println("Press H to get a hint");
             System.out.println("Enter a position [1A-9I]:");
             String pos = input.next();
             if (Character.getNumericValue(pos.charAt(0)) == 0)
                 break;
+            System.out.println("Press H to get a hint");
             System.out.println("Enter a number [1-9]:");
             String number = input.next();
-
             if (number.equals("H")) {
                 writeOnAnCell(pos, getHint(pos));
             } else if (number.equals("0"))
