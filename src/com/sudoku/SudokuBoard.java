@@ -275,25 +275,29 @@ public class SudokuBoard {
 
     @Override
     public String toString() {
-        String line = "   ------+-------+--------";
+        return parseToChars(".");
+    }
+
+    public String parseToChars(String emptyCellChar) {
+        String line = "------+-------+--------";
         StringBuilder board = new StringBuilder();
-        board.append("   A B C   D E F   G H I ").append("\n");
-        for (int row = 0; row < BOARD_SIZE; row++) {
+        board.append("\b" + "\b" + "\b").append("A B C   D E F   G H I ").append("\n");
+        for (int row = 0; row < SIZE; row++) {
             if (row != 0 && row % 3 == 0) {
-                board.append(line).append("\n");
+                board.append("\b" + "\b").append(line).append("\n");
             }
-            board.append(row + 1 + "  ");
-            appendRow(row, board);
+            board.append(row + 1).append("\b" + "\b");
+            appendRow(row, board, emptyCellChar);
         }
         return board.toString();
     }
 
-    public StringBuilder appendRow(int row, StringBuilder board) {
+    public StringBuilder appendRow(int row, StringBuilder board, String emptyCellChar) {
         int col = 0;
         while (col < SIZE) {
             int i;
             for (i = col; i < col + 3; i++) {
-                appendCell(getCell(row, i), board);
+                appendCell(getCell(row, i), board, emptyCellChar);
             }
             board.append("| ");
             col = i;
@@ -301,11 +305,11 @@ public class SudokuBoard {
         return board.append("\n");
     }
 
-    public StringBuilder appendCell(Cell cell, StringBuilder board) {
+    public StringBuilder appendCell(Cell cell, StringBuilder board, String emptyCellChar) {
         if (cell.isEmpty()) {
-            board.append(". ");
+            board.append(emptyCellChar).append("\b");
         } else {
-            board.append(cell.getValue()).append(" ");
+            board.append(cell.getValue()).append("\b");
         }
         return board;
     }
