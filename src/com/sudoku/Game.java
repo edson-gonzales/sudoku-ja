@@ -1,5 +1,7 @@
 package com.sudoku;
 
+import com.algorithm.Algorithm;
+import com.algorithm.Backtracking;
 import com.utils.SudokuGenerator;
 
 import java.util.HashMap;
@@ -13,7 +15,9 @@ public class Game {
     private String emptyCellChar = "*";
     private int minComplexity = 1;
     private int maxComplexity = 5;
+    private Algorithm algorithm;
     private SudokuBoard board;
+    private SudokuBoard solve;
     private static final Map<String, Integer> LETTERS = new HashMap<String, Integer>();
 
     {
@@ -29,7 +33,10 @@ public class Game {
     }
 
     public Game() {
-        this.board = SudokuGenerator.generate(this.minComplexity, this.maxComplexity);;
+        this.board = SudokuGenerator.generate(this.minComplexity, this.maxComplexity);
+        this.solve = new SudokuBoard(this.board.getArrayBoard());
+        this.algorithm = new Backtracking();
+        algorithm.solve(this.solve);
     }
 
     public void start() {
@@ -38,15 +45,22 @@ public class Game {
         Scanner input = new Scanner(System.in);
         do {
             System.out.println("Press 0 to back to Menu");
+            System.out.println("Press H to get a hint");
             System.out.println("Enter a position [1A-9I]:");
             String pos = input.next();
             if (Character.getNumericValue(pos.charAt(0)) == 0)
                 break;
             System.out.println("Enter a number [1-9]:");
-            int num = input.nextInt();
-            if (num == 0)
+            String number = input.next();
+
+            if (number.equals("H")) {
+                writeOnAnCell(pos, getHint(pos));
+            } else if (number.equals("0"))
                 break;
-            writeOnAnCell(pos, num);
+            else {
+                int num = Integer.parseInt(number);
+                writeOnAnCell(pos, num);
+            }
             System.out.println(this.board.parseToChars(emptyCellChar));
         } while (this.board.hasAnEmptyCell());
     }
@@ -55,5 +69,12 @@ public class Game {
         int row = Character.getNumericValue(pos.charAt(0)) - 1;
         int col = LETTERS.get(Character.toString(pos.charAt(1)));
         this.board.getCell(row, col).setValue(num);
+    }
+
+    public int getHint(String pos) {
+        int row = Character.getNumericValue(pos.charAt(0)) - 1;
+        int col = LETTERS.get(Character.toString(pos.charAt(1)));
+        algorithm.solve(this.solve);
+        return this.solve.getCell(row, col).getValue();
     }
 }

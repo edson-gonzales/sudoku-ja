@@ -13,6 +13,7 @@ public class SudokuBoard {
     public static int SIZE = 9;
 
     private Cell[][] board = new Cell[SIZE][SIZE];
+    private int [][] arrayBoard = new int[SIZE][SIZE];
 
     /**
      * Create a SudokuBoard instance from an array numbers
@@ -20,7 +21,17 @@ public class SudokuBoard {
      * @param arrayBoard An array of integers
      */
     public SudokuBoard(int[][] arrayBoard) {
+        this.arrayBoard= arrayBoard;
         parseToCells(arrayBoard);
+    }
+
+    public Cell[][] getBoard(){
+        return board;
+    }
+
+    public int[][] getArrayBoard(){
+        parseToArray();
+        return arrayBoard;
     }
 
     /**
@@ -62,6 +73,19 @@ public class SudokuBoard {
         for (int row = 0; row < SIZE; row++) {
             for (int column = 0; column < SIZE; column++) {
                 this.board[row][column] = new Cell(row, column, arrayBoard[row][column]);
+            }
+        }
+    }
+
+    /**
+     * Convert an array of integers to an array of Cells
+     *
+     */
+    public void parseToArray() {
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                int value = this.getCell(row, column).getValue();
+                arrayBoard[row][column] = value;
             }
         }
     }
