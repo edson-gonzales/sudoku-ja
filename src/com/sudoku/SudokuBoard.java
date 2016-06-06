@@ -284,12 +284,14 @@ public class SudokuBoard {
 
     @Override
     public String toString() {
-        String line = "------+-------+--------";
+        String line = "   ------+-------+--------";
         StringBuilder board = new StringBuilder();
+        board.append("   A B C   D E F   G H I ").append("\n");
         for (int row = 0; row < BOARD_SIZE; row++) {
             if (row != 0 && row % 3 == 0) {
                 board.append(line).append("\n");
             }
+            board.append(row + 1 + "  ");
             appendRow(row, board);
         }
         return board.toString();

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class SudokuGenerator {
 
-    private static SudokuBoard board = new SudokuBoard();
+    private SudokuBoard board = new SudokuBoard();
 
     /**
      * Generate a board according to a complexity range
@@ -23,7 +23,7 @@ public class SudokuGenerator {
      * @param maxComplexity The max empty cells per subGrid
      * @return The sudoku board generated
      */
-    public static void generate(int minComplexity, int maxComplexity) {
+    public SudokuBoard generate(int minComplexity, int maxComplexity) {
         setOneCellOnSubGrids();
 
         Algorithm backtracking = new Backtracking();
@@ -34,6 +34,7 @@ public class SudokuGenerator {
         clearNCellsOnSubGrids(minComplexity, maxComplexity);
 
         exportSudokuGame();
+        return board;
     }
 
     /**
@@ -41,7 +42,7 @@ public class SudokuGenerator {
      * numbered from 0 to 8, this method set one cell on each sub grid
      * randomly
      */
-    public static void setOneCellOnSubGrids() {
+    public void setOneCellOnSubGrids() {
         ArrayList<Integer> subGridOrder = getSubGridsOrder();
         for (Integer subGrid : subGridOrder) {
             setOneCellOnSubGrid(subGrid);
@@ -56,7 +57,7 @@ public class SudokuGenerator {
      * @param minComplexity The min empty cells per subGrid
      * @param maxComplexity The max empty cells per subGrid
      */
-    public static void clearNCellsOnSubGrids(int minComplexity, int maxComplexity) {
+    public void clearNCellsOnSubGrids(int minComplexity, int maxComplexity) {
         ArrayList<Integer> subGridOrder = getSubGridsOrder();
         for (Integer subGrid : subGridOrder) {
             clearNCellsOnSubGrid(subGrid, getComplexity(minComplexity, maxComplexity));
@@ -71,7 +72,7 @@ public class SudokuGenerator {
      * @param maxComplexity The max empty cells per subGrid
      * @return The cell number randomly
      */
-    private static int getComplexity(int minComplexity, int maxComplexity) {
+    private int getComplexity(int minComplexity, int maxComplexity) {
         return NumberGenerator.generate(minComplexity, maxComplexity);
     }
 
@@ -82,7 +83,7 @@ public class SudokuGenerator {
      *
      * @return The random order to start filling the sub grids
      */
-    private static ArrayList<Integer> getSubGridsOrder() {
+    private ArrayList<Integer> getSubGridsOrder() {
         int iniSubGrid = 0;
         int endSubGrid = 8;
         int totalSubGrids = 9;
@@ -94,7 +95,7 @@ public class SudokuGenerator {
      *
      * @param subGridNumber The subGrid number on the board [0 ... 8]
      */
-    public static void setOneCellOnSubGrid(int subGridNumber) {
+    public void setOneCellOnSubGrid(int subGridNumber) {
         List<Cell> subGridCells = board.getSubGridCells(subGridNumber);
 
         int cellNumber = getSubGridCellNumber();
@@ -113,7 +114,7 @@ public class SudokuGenerator {
      * @param cellsNumber   The number of zeros
      * @param subGridNumber The subGrid number on the board [0 ... 8]
      */
-    public static void clearNCellsOnSubGrid(int subGridNumber, int cellsNumber) {
+    public void clearNCellsOnSubGrid(int subGridNumber, int cellsNumber) {
         ArrayList<Integer> cellNumbers = getSubGridCells(cellsNumber);
         List<Cell> subGridCells = board.getSubGridCells(subGridNumber);
         for (Integer cellNumber : cellNumbers) {
@@ -130,7 +131,7 @@ public class SudokuGenerator {
      * @param size The number of cells to be return
      * @return The group of cell numbers
      */
-    private static ArrayList<Integer> getSubGridCells(int size) {
+    private ArrayList<Integer> getSubGridCells(int size) {
         int iniCell = 0;
         int endCell = 8;
         return NumberGenerator.generate(iniCell, endCell, size);
@@ -143,7 +144,7 @@ public class SudokuGenerator {
      *
      * @return The cell number randomly
      */
-    private static int getSubGridCellNumber() {
+    private int getSubGridCellNumber() {
         int iniCell = 0;
         int endCell = 8;
         return NumberGenerator.generate(iniCell, endCell);
@@ -152,7 +153,7 @@ public class SudokuGenerator {
     /**
      * Export sudoku game generated to an txt file
      */
-    private static void exportSudokuGame() {
+    private void exportSudokuGame() {
         try {
             WriterManager.exportTxtFile(board.toString());
         } catch (IOException e) {
