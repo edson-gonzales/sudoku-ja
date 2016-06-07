@@ -1,4 +1,4 @@
-import com.readers.SudokuReader;
+import com.utils.readers.SudokuReader;
 import com.sudoku.SudokuBoard;
 import org.junit.Assert;
 import org.junit.Test;
