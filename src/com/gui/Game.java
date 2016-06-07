@@ -2,27 +2,42 @@ package com.gui;
 
 import com.algorithm.Algorithm;
 import com.algorithm.Backtracking;
+import com.algorithm.PeterNorvig;
 import com.sudoku.SudokuBoard;
 import com.utils.SudokuGenerator;
+import com.utils.readers.PropertiesReader;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 /**
  * This class represent the Game console interface
  */
 public class Game extends Console{
-    private String emptyCellChar = ".";
-    private int minComplexity = 0;
-    private int maxComplexity = 1;
-    private Algorithm algorithm = new Backtracking();
     private SudokuBoard board;
-    private SudokuBoard solve;
+    private SudokuBoard solved;
+    private PropertiesReader propertiesReader;
+
+
+    private static final Map<String, Integer> BOTTOM_LIMIT_LEVELS = new HashMap<>();
+
+    static {
+        BOTTOM_LIMIT_LEVELS.put("Easy", 1);
+        BOTTOM_LIMIT_LEVELS.put("Medium", 3);
+        BOTTOM_LIMIT_LEVELS.put("Hard", 6);
+    }
+
+    private static final Map<String, Integer> TOP_LIMIT_LEVELS = new HashMap<>();
+
+    static {
+        TOP_LIMIT_LEVELS.put("Easy", 3);
+        TOP_LIMIT_LEVELS.put("Medium", 5);
+        TOP_LIMIT_LEVELS.put("Hard", 9);
+    }
 
     private static final Map<String, Integer> LETTERS = new HashMap<>();
 
-    {
+    static {
         LETTERS.put("A", 0);
         LETTERS.put("B", 1);
         LETTERS.put("C", 2);
@@ -38,10 +53,35 @@ public class Game extends Console{
      * This is the constructor of Game
      */
     public Game() {
-        this.board = SudokuGenerator.generate(this.minComplexity, this.maxComplexity);
-        this.solve = new SudokuBoard(this.board.parseToArray());
-        algorithm.solve(this.solve);
+        propertiesReader = new PropertiesReader();
+        generateGameBoard();
+        generateSolution();
+    }
 
+    private void generateGameBoard(){
+        String level = propertiesReader.getProperty("LEVEL");
+        int minComplexity = BOTTOM_LIMIT_LEVELS.get(level);
+        int maxComplexity = TOP_LIMIT_LEVELS.get(level);
+        this.board = SudokuGenerator.generate(minComplexity, maxComplexity);
+    }
+
+    private void generateSolution(){
+        this.solved = new SudokuBoard(this.board.parseToArray());
+        Algorithm algorithm;
+        String algorithmType = propertiesReader.getProperty("ALGORITHM");
+
+        switch(algorithmType){
+            case "Backtracking":
+                algorithm =  new Backtracking();
+                algorithm.solve(this.solved);
+                break;
+            case "Peter Norvig":
+                algorithm =  new PeterNorvig();
+                algorithm.solve(this.solved);
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -91,7 +131,7 @@ public class Game extends Console{
      * Return an answer according to the result of the game
      */
     private void returnAnswer() {
-        if (this.board.isEqualsTo(this.solve))
+        if (this.board.isEqualsTo(this.solved))
             display("Congratulations you win !!\n");
         else
             display("You lose !!\n");
@@ -101,6 +141,7 @@ public class Game extends Console{
      * Display the game board by console
      */
     private void displayGame() {
+        String emptyCellChar = propertiesReader.getProperty("CHARACTER");
         String boardChars = this.board.parseToChars(emptyCellChar);
         display(boardChars);
     }
@@ -126,7 +167,6 @@ public class Game extends Console{
     public int getHint(String pos) {
         int row = Character.getNumericValue(pos.charAt(0)) - 1;
         int col = LETTERS.get(Character.toString(pos.charAt(1)));
-        this.algorithm.solve(this.solve);
-        return this.solve.getCell(row, col).getValue();
+        return this.solved.getCell(row, col).getValue();
     }
 }

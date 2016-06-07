@@ -22,7 +22,8 @@ public class Menu extends Console{
                     game.start();
                     break;
                 case 2:
-                    display("Configuration Settings");
+                    Configuration configuration = new Configuration();
+                    configuration.start();
                     break;
                 case 3:
                     display("Exit");
