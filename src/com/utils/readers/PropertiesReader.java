@@ -43,6 +43,9 @@ public class PropertiesReader {
                 case LEVEL:
                     value = prop.getProperty(CONFIG.LEVEL.name());
                     break;
+                case CHARACTER:
+                    value = prop.getProperty(CONFIG.CHARACTER.name());
+                    break;
                 default:
                     break;
             }
