@@ -10,7 +10,7 @@ import org.junit.Test;
  * @author Jose Cabrera
  */
 public class PropertiesTest {
-    String algorithm, outputPath, outputName, level;
+    String algorithm, outputPath, outputName, level, character;
 
     @Test
     public void verifyIfPropertiesFileIsCreatedDefaultValues() {
@@ -73,6 +73,18 @@ public class PropertiesTest {
     }
 
     @Test
+    public void verifyIfCharacterPropertyValueCanBeChanged() {
+        PropertiesWriter propertiesWriter = new PropertiesWriter();
+        propertiesWriter.setProperties();
+        propertiesWriter.setProperty(CONFIG.CHARACTER.name(), "Modified Name");
+        System.out.println(CONFIG.CHARACTER);
+        PropertiesReader propertiesReader = new PropertiesReader();
+        character = propertiesReader.getProperty(CONFIG.CHARACTER.name());
+        Assert.assertEquals("The character obtained is the same that was written", CONFIG.CHARACTER.toString(), character);
+        propertiesWriter.closeWriter();
+    }
+
+    @Test
     public void verifyIfPropertyValueCanBeChanged() {
         PropertiesWriter propertiesWriter = new PropertiesWriter();
         propertiesWriter.setProperties();
@@ -86,6 +98,8 @@ public class PropertiesTest {
         Assert.assertEquals("The outputName obtained is the same that was written", CONFIG.OUTPUT_FILE_NAME.toString(), outputName);
         level = propertiesReader.getProperty(CONFIG.LEVEL.name());
         Assert.assertEquals("The level obtained is the same that was written", CONFIG.LEVEL.toString(), level);
+        character = propertiesReader.getProperty(CONFIG.CHARACTER.name());
+        Assert.assertEquals("The character obtained is the same that was written", CONFIG.CHARACTER.toString(), character);
         propertiesWriter.closeWriter();
     }
 

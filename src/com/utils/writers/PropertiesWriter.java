@@ -20,12 +20,14 @@ public class PropertiesWriter {
     public static final String OUTPUT_PATH = "OUTPUT_PATH";
     public static final String OUTPUT_FILE_NAME = "OUTPUT_FILE_NAME";
     public static final String LEVEL = "LEVEL";
+    public static final String CHARACTER = "CHARACTER";
 
     public enum CONFIG {
         ALGORITHM("BackTracking"),
         OUTPUT_PATH("./"),
         OUTPUT_FILE_NAME("defaultName"),
-        LEVEL("Easy");
+        LEVEL("Easy"),
+        CHARACTER(".");
 
         private String value;
 
@@ -60,6 +62,7 @@ public class PropertiesWriter {
             prop.put(CONFIG.OUTPUT_PATH.name(), CONFIG.OUTPUT_PATH.toString());
             prop.put(CONFIG.OUTPUT_FILE_NAME.name(), CONFIG.OUTPUT_FILE_NAME.toString());
             prop.put(CONFIG.LEVEL.name(), CONFIG.LEVEL.toString());
+            prop.put(CONFIG.CHARACTER.name(), CONFIG.CHARACTER.toString());
             prop.store(this.output, null);
         } catch (IOException ioException) {
             Logger.getLogger(PropertiesWriter.class).error("Unable to read file", ioException);
@@ -99,6 +102,9 @@ public class PropertiesWriter {
                 break;
             case LEVEL:
                 CONFIG.LEVEL.setValue(value);
+                break;
+            case CHARACTER:
+                CONFIG.CHARACTER.setValue(value);
                 break;
             default:
                 break;
