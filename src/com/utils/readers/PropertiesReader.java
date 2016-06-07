@@ -28,8 +28,8 @@ public class PropertiesReader {
     public String getProperty(String key) {
         String value = null;
         try {
-            input = new FileInputStream(CONFIG_PATH);
-            prop.load(input);
+            this.input = new FileInputStream(CONFIG_PATH);
+            this.prop.load(input);
             switch (key) {
                 case ALGORITHM:
                     value = prop.getProperty(CONFIG.ALGORITHM.name());
@@ -46,7 +46,7 @@ public class PropertiesReader {
                 default:
                     break;
             }
-            input.close();
+            this.input.close();
         } catch (FileNotFoundException fileNotFound) {
             Logger.getLogger(PropertiesReader.class).error("Unable to find file", fileNotFound);
         } catch (IOException ioException) {

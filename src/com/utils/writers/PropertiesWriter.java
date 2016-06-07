@@ -55,12 +55,12 @@ public class PropertiesWriter {
      */
     public void setProperties() {
         try {
-            output = new FileOutputStream(CONFIG_PATH);
+            this.output = new FileOutputStream(CONFIG_PATH);
             prop.put(CONFIG.ALGORITHM.name(), CONFIG.ALGORITHM.toString());
             prop.put(CONFIG.OUTPUT_PATH.name(), CONFIG.OUTPUT_PATH.toString());
             prop.put(CONFIG.OUTPUT_FILE_NAME.name(), CONFIG.OUTPUT_FILE_NAME.toString());
             prop.put(CONFIG.LEVEL.name(), CONFIG.LEVEL.toString());
-            prop.store(output, null);
+            prop.store(this.output, null);
         } catch (IOException ioException) {
             Logger.getLogger(PropertiesWriter.class).error("Unable to read file", ioException);
         }
@@ -70,9 +70,9 @@ public class PropertiesWriter {
      * Verify if the file is not null and close the writer
      */
     public void closeWriter() {
-        if (output != null) {
+        if (this.output != null) {
             try {
-                output.close();
+                this.output.close();
             } catch (IOException ioException) {
                 Logger.getLogger(PropertiesWriter.class).error("Unable to read file", ioException);
             }
