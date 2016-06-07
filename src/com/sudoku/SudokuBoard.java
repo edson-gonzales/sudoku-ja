@@ -13,7 +13,6 @@ public class SudokuBoard {
     public static int SIZE = 9;
 
     private Cell[][] board = new Cell[SIZE][SIZE];
-    private int [][] arrayBoard = new int[SIZE][SIZE];
 
     /**
      * Create a SudokuBoard instance from an array numbers
@@ -21,17 +20,7 @@ public class SudokuBoard {
      * @param arrayBoard An array of integers
      */
     public SudokuBoard(int[][] arrayBoard) {
-        this.arrayBoard= arrayBoard;
         parseToCells(arrayBoard);
-    }
-
-    public Cell[][] getBoard(){
-        return board;
-    }
-
-    public int[][] getArrayBoard(){
-        parseToArray();
-        return arrayBoard;
     }
 
     /**
@@ -48,6 +37,31 @@ public class SudokuBoard {
      */
     public SudokuBoard() {
         generateEmptyBoard();
+    }
+
+    /**
+     * Verify if the cell values on the board are equals to another
+     *
+     * @param other Another SudokuBoard object
+     * @return Return true or false
+     */
+    public Boolean isEqualsTo(SudokuBoard other) {
+        for (int row = 0; row < SIZE; row++) {
+            if(!isRowEqualsTo(row, other))
+                return false;
+        }
+        return true;
+    }
+
+    private Boolean isRowEqualsTo(int row, SudokuBoard other) {
+        for (int column = 0; column < SIZE; column++) {
+            int value = this.getCell(row, column).getValue();
+            int otherValue = other.getCell(row, column).getValue();
+            if (value != otherValue) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -73,19 +87,6 @@ public class SudokuBoard {
         for (int row = 0; row < SIZE; row++) {
             for (int column = 0; column < SIZE; column++) {
                 this.board[row][column] = new Cell(row, column, arrayBoard[row][column]);
-            }
-        }
-    }
-
-    /**
-     * Convert an array of integers to an array of Cells
-     *
-     */
-    public void parseToArray() {
-        for (int row = 0; row < 9; row++) {
-            for (int column = 0; column < 9; column++) {
-                int value = this.getCell(row, column).getValue();
-                arrayBoard[row][column] = value;
             }
         }
     }
@@ -285,7 +286,7 @@ public class SudokuBoard {
      * @return The list of cells on a sub grid
      */
     public List<Cell> getSubGridCells(int num) {
-        List<Cell> subGrid = new ArrayList<Cell>();
+        List<Cell> subGrid = new ArrayList<>();
         Cell initCell = getIniCellSubGrid(num);
         int iniRow = initCell.getPosX();
         int iniCol = initCell.getPosY();
@@ -297,26 +298,46 @@ public class SudokuBoard {
         return subGrid;
     }
 
-    @Override
-    public String toString() {
-        return parseToChars(".");
+    /**
+     * Convert to an array of integers
+     *
+     * @return The array of integers that represents the cell values of board
+     */
+    public int[][] parseToArray() {
+        int[][] arrayBoard = new int[SIZE][SIZE];
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                int value = this.getCell(row, column).getValue();
+                arrayBoard[row][column] = value;
+            }
+        }
+        return arrayBoard;
     }
 
+    /**
+     * Convert to an string of characters
+     *
+     * @param emptyCellChar The representative character for an empty cell
+     * @return The string of characters that represents the board
+     */
     public String parseToChars(String emptyCellChar) {
-        String line = "------+-------+--------";
-        StringBuilder board = new StringBuilder();
-        board.append("\b" + "\b" + "\b").append("A B C   D E F   G H I ").append("\n");
+        String header = " A B C   D E F   G H I ";
+        String indentation = "\b \b";
+        String line = "-------+------+--------";
+        StringBuilder builder = new StringBuilder();
+        builder.append(indentation).append(header).append("\n");
         for (int row = 0; row < SIZE; row++) {
             if (row != 0 && row % 3 == 0) {
-                board.append("\b" + "\b").append(line).append("\n");
+                builder.append(indentation).append(line).append("\n");
             }
-            board.append(row + 1).append("\b" + "\b");
-            appendRow(row, board, emptyCellChar);
+            String rowIndex = Integer.toString(row + 1);
+            builder.append(rowIndex).append(indentation);
+            appendRow(row, builder, emptyCellChar);
         }
-        return board.toString();
+        return builder.toString();
     }
 
-    public StringBuilder appendRow(int row, StringBuilder board, String emptyCellChar) {
+    private StringBuilder appendRow(int row, StringBuilder board, String emptyCellChar) {
         int col = 0;
         while (col < SIZE) {
             int i;
@@ -329,12 +350,17 @@ public class SudokuBoard {
         return board.append("\n");
     }
 
-    public StringBuilder appendCell(Cell cell, StringBuilder board, String emptyCellChar) {
+    private StringBuilder appendCell(Cell cell, StringBuilder board, String emptyCellChar) {
         if (cell.isEmpty()) {
             board.append(emptyCellChar).append("\b");
         } else {
             board.append(cell.getValue()).append("\b");
         }
         return board;
+    }
+
+    @Override
+    public String toString() {
+        return parseToChars(".");
     }
 }
