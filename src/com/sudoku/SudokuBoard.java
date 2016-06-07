@@ -40,6 +40,31 @@ public class SudokuBoard {
     }
 
     /**
+     * Verify if the cell values on the board are equals to another
+     *
+     * @param other Another SudokuBoard object
+     * @return Return true or false
+     */
+    public Boolean isEqualsTo(SudokuBoard other) {
+        for (int row = 0; row < SIZE; row++) {
+            if(!isRowEqualsTo(row, other))
+                return false;
+        }
+        return true;
+    }
+
+    private Boolean isRowEqualsTo(int row, SudokuBoard other) {
+        for (int column = 0; column < SIZE; column++) {
+            int value = this.getCell(row, column).getValue();
+            int otherValue = other.getCell(row, column).getValue();
+            if (value != otherValue) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Verify if a num can be set in a cell on the board
      *
      * @param cell A Cell object on the board
@@ -261,7 +286,7 @@ public class SudokuBoard {
      * @return The list of cells on a sub grid
      */
     public List<Cell> getSubGridCells(int num) {
-        List<Cell> subGrid = new ArrayList<Cell>();
+        List<Cell> subGrid = new ArrayList<>();
         Cell initCell = getIniCellSubGrid(num);
         int iniRow = initCell.getPosX();
         int iniCol = initCell.getPosY();
@@ -273,25 +298,51 @@ public class SudokuBoard {
         return subGrid;
     }
 
-    @Override
-    public String toString() {
-        String line = "------+-------+--------";
-        StringBuilder board = new StringBuilder();
-        for (int row = 0; row < SIZE; row++) {
-            if (row != 0 && row % 3 == 0) {
-                board.append(line).append("\n");
+    /**
+     * Convert to an array of integers
+     *
+     * @return The array of integers that represents the cell values of board
+     */
+    public int[][] parseToArray() {
+        int[][] arrayBoard = new int[SIZE][SIZE];
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                int value = this.getCell(row, column).getValue();
+                arrayBoard[row][column] = value;
             }
-            appendRow(row, board);
         }
-        return board.toString();
+        return arrayBoard;
     }
 
-    public StringBuilder appendRow(int row, StringBuilder board) {
+    /**
+     * Convert to an string of characters
+     *
+     * @param emptyCellChar The representative character for an empty cell
+     * @return The string of characters that represents the board
+     */
+    public String parseToChars(String emptyCellChar) {
+        String header = " A B C   D E F   G H I ";
+        String indentation = "\b \b";
+        String line = "-------+------+--------";
+        StringBuilder builder = new StringBuilder();
+        builder.append(indentation).append(header).append("\n");
+        for (int row = 0; row < SIZE; row++) {
+            if (row != 0 && row % 3 == 0) {
+                builder.append(indentation).append(line).append("\n");
+            }
+            String rowIndex = Integer.toString(row + 1);
+            builder.append(rowIndex).append(indentation);
+            appendRow(row, builder, emptyCellChar);
+        }
+        return builder.toString();
+    }
+
+    private StringBuilder appendRow(int row, StringBuilder board, String emptyCellChar) {
         int col = 0;
         while (col < SIZE) {
             int i;
             for (i = col; i < col + 3; i++) {
-                appendCell(getCell(row, i), board);
+                appendCell(getCell(row, i), board, emptyCellChar);
             }
             board.append("| ");
             col = i;
@@ -299,12 +350,17 @@ public class SudokuBoard {
         return board.append("\n");
     }
 
-    public StringBuilder appendCell(Cell cell, StringBuilder board) {
+    private StringBuilder appendCell(Cell cell, StringBuilder board, String emptyCellChar) {
         if (cell.isEmpty()) {
-            board.append(". ");
+            board.append(emptyCellChar).append("\b");
         } else {
-            board.append(cell.getValue()).append(" ");
+            board.append(cell.getValue()).append("\b");
         }
         return board;
+    }
+
+    @Override
+    public String toString() {
+        return parseToChars(".");
     }
 }
