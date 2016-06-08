@@ -22,8 +22,15 @@ public class Menu extends Console{
                     game.start();
                     break;
                 case 2:
-                    Configuration configuration = new Configuration();
-                    configuration.start();
+                    Configuration configuration = null;
+                    try {
+                        configuration = new Configuration();
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+                    if (configuration != null) {
+                        configuration.start();
+                    }
                     break;
                 case 3:
                     display("Exit");

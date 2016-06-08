@@ -2,6 +2,10 @@ package com.gui;
 
 import com.utils.writers.PropertiesWriter;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -9,9 +13,40 @@ import java.util.Scanner;
  */
 public class Configuration extends Console {
     private PropertiesWriter propertiesWriter = new PropertiesWriter();
+    private Boolean exit = false;
+    protected Map<Integer, Method> MENU_OPTIONS = new HashMap<>();
 
-    public void start() {
-        Boolean exit = false;
+    {
+        MENU_OPTIONS.put(1, Configuration.class.getMethod("enterOutputType"));
+        MENU_OPTIONS.put(2, Configuration.class.getMethod("startSelectLevel"));
+        MENU_OPTIONS.put(3, Configuration.class.getMethod("startSelectAlgorithm"));
+        MENU_OPTIONS.put(4, Configuration.class.getMethod("enterCharacter"));
+        MENU_OPTIONS.put(5, Configuration.class.getMethod("exit"));
+    }
+
+    protected Map<Integer, String> ALGORITHM_OPTIONS = new HashMap<>();
+
+    {
+        ALGORITHM_OPTIONS.put(1, "Backtracking");
+        ALGORITHM_OPTIONS.put(2, "Peter Norvig");
+        ALGORITHM_OPTIONS.put(3, "Other");
+    }
+
+    protected Map<Integer, String> LEVELS_OPTIONS = new HashMap<>();
+
+    {
+        LEVELS_OPTIONS.put(1, "Easy");
+        LEVELS_OPTIONS.put(2, "Medium");
+        LEVELS_OPTIONS.put(3, "Hard");
+        LEVELS_OPTIONS.put(4, "Custom");
+    }
+
+    public Configuration() throws NoSuchMethodException {
+
+    }
+
+    public void start(){
+
         do {
             display("------Configuration Settings------" + "\n");
             display("1.Output type");
@@ -22,98 +57,67 @@ public class Configuration extends Console {
             display("Select an option:");
             input = new Scanner(System.in);
             int option = input.nextInt();
-            switch (option) {
-                case 1:
-                    enterOutputType();
-                    break;
-                case 2:
-                    selectLevel();
-                    break;
-                case 3:
-                    selectAlgorithm();
-                    break;
-                case 4:
-                    enterCharacter();
-                    break;
-                case 5:
-                    exit = true;
-                    break;
-                default:
-                    display("ERROR::Please enter a valid selection.");
-                    break;
-            }
+            selectOption(option);
         } while (!exit);
     }
 
+    public void selectOption(int option) {
+        try {
+            MENU_OPTIONS.get(option).invoke(this, null);
+        } catch (IllegalAccessException e) {
+            org.apache.log4j.Logger.getLogger(PropertiesWriter.class).error("The method is inaccessible", e);
+        } catch (InvocationTargetException e) {
+            org.apache.log4j.Logger.getLogger(PropertiesWriter.class).error("The method throws an exception.", e);
+        }
+    }
 
-    private void enterCharacter() {
+    public void enterCharacter() {
         display("Enter a character that represents an empty cell:");
         String character = input.next();
         propertiesWriter.setProperty(PropertiesWriter.CHARACTER, character);
     }
 
-    private void selectLevel() {
+    public void startSelectLevel() {
         display("--------Levels---------");
         display("1.Easy");
         display("2.Medium");
         display("3.Hard");
         display("4.Custom");
-        display("5.Exit");
         display("Select an option:");
         int option = input.nextInt();
-        switch (option) {
-            case 1:
-                propertiesWriter.setProperty(PropertiesWriter.LEVEL, "Easy");
-                break;
-            case 2:
-                propertiesWriter.setProperty(PropertiesWriter.LEVEL, "Medium");
-                break;
-            case 3:
-                propertiesWriter.setProperty(PropertiesWriter.LEVEL, "Hard");
-                break;
-            case 4:
-                propertiesWriter.setProperty(PropertiesWriter.LEVEL, "Custom");
-                break;
-            case 5:
-                break;
-            default:
-                display("ERROR::Please enter a valid selection.");
-                break;
-        }
+        selectLevel(option);
     }
 
-    private void selectAlgorithm() {
+    public void selectLevel(int option) {
+        String value = LEVELS_OPTIONS.get(option);
+        propertiesWriter.setProperty(PropertiesWriter.LEVEL, value);
+    }
+
+    public void startSelectAlgorithm() {
         display("--------Algorithm---------");
         display("1.Backtracking");
         display("2.Peter Norvig");
         display("3.Other");
-        display("4.Exit");
         display("Select an option:");
         int option = input.nextInt();
-        switch (option) {
-            case 1:
-                propertiesWriter.setProperty(PropertiesWriter.ALGORITHM, "Backtracking");
-                break;
-            case 2:
-                propertiesWriter.setProperty(PropertiesWriter.ALGORITHM, "Peter Norvig");
-                break;
-            case 3:
-                propertiesWriter.setProperty(PropertiesWriter.ALGORITHM, "Other");
-                break;
-            case 4:
-                break;
-            default:
-                display("ERROR::Please enter a valid selection.");
-                break;
-        }
+        selectAlgorithm(option);
     }
 
-    private void enterOutputType() {
+    public void selectAlgorithm(int option) {
+        String value = ALGORITHM_OPTIONS.get(option);
+        propertiesWriter.setProperty(PropertiesWriter.ALGORITHM, value);
+    }
+
+    public void enterOutputType() {
         display("Enter the path of the output file:");
         String outputPath = input.next();
         propertiesWriter.setProperty(PropertiesWriter.OUTPUT_PATH, outputPath);
         display("Enter the file name:");
         String outputFileName = input.next();
         propertiesWriter.setProperty(PropertiesWriter.OUTPUT_FILE_NAME, outputFileName);
+    }
+
+    public void exit() {
+        this.exit = true;
     }
 }
