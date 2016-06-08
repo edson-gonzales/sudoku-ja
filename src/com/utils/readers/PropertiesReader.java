@@ -46,6 +46,29 @@ public class PropertiesReader {
                 case CHARACTER:
                     value = prop.getProperty(CONFIG.CHARACTER.name());
                     break;
+                case EASY_MIN:
+                    value = prop.getProperty(CONFIG.EASY_MIN.name());
+                    break;
+                case MEDIUM_MIN:
+                    value = prop.getProperty(CONFIG.MEDIUM_MIN.name());
+                    break;
+                case HARD_MIN:
+                    value = prop.getProperty(CONFIG.HARD_MIN.name());
+                    break;
+                case CUSTOM_MIN:
+                    value = prop.getProperty(CONFIG.CUSTOM_MIN.name());
+                    break;
+                case EASY_MAX:
+                    value = prop.getProperty(CONFIG.EASY_MAX.name());
+                case MEDIUM_MAX:
+                    value = prop.getProperty(CONFIG.MEDIUM_MAX.name());
+                    break;
+                case HARD_MAX:
+                    value = prop.getProperty(CONFIG.HARD_MAX.name());
+                    break;
+                case CUSTOM_MAX:
+                    value = prop.getProperty(CONFIG.CUSTOM_MAX.name());
+                    break;
                 default:
                     break;
             }
