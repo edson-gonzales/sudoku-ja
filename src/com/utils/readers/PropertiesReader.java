@@ -1,12 +1,14 @@
 package com.utils.readers;
 
-import com.utils.writers.PropertiesWriter.*;
+import com.utils.writers.PropertiesWriter;
+import com.utils.writers.PropertiesWriter.CONFIG;
 import org.apache.log4j.Logger;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
-
-import static com.utils.writers.PropertiesWriter.*;
 
 /**
  * Class that represent the Configuration Properties Reader class
@@ -30,25 +32,8 @@ public class PropertiesReader {
         try {
             this.input = new FileInputStream(CONFIG_PATH);
             this.prop.load(input);
-            switch (key) {
-                case ALGORITHM:
-                    value = prop.getProperty(CONFIG.ALGORITHM.name());
-                    break;
-                case OUTPUT_FILE_NAME:
-                    value = prop.getProperty(CONFIG.OUTPUT_FILE_NAME.name());
-                    break;
-                case OUTPUT_PATH:
-                    value = prop.getProperty(CONFIG.OUTPUT_PATH.name());
-                    break;
-                case LEVEL:
-                    value = prop.getProperty(CONFIG.LEVEL.name());
-                    break;
-                case CHARACTER:
-                    value = prop.getProperty(CONFIG.CHARACTER.name());
-                    break;
-                default:
-                    break;
-            }
+            CONFIG config = PropertiesWriter.CONFIG_MAP.get(key);
+            value = config.toString();
             this.input.close();
         } catch (FileNotFoundException fileNotFound) {
             Logger.getLogger(PropertiesReader.class).error("Unable to find file", fileNotFound);
