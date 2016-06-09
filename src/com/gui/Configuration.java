@@ -1,6 +1,7 @@
 package com.gui;
 
 import com.utils.writers.PropertiesWriter;
+import org.apache.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,8 +15,8 @@ import java.util.Scanner;
 public class Configuration extends Console {
     private PropertiesWriter propertiesWriter = new PropertiesWriter();
     private Boolean exit = false;
-    protected Map<Integer, Method> MENU_OPTIONS = new HashMap<>();
 
+    private final Map<Integer, Method> MENU_OPTIONS = new HashMap<>();
     {
         MENU_OPTIONS.put(1, Configuration.class.getMethod("enterOutputType"));
         MENU_OPTIONS.put(2, Configuration.class.getMethod("startSelectLevel"));
@@ -24,17 +25,15 @@ public class Configuration extends Console {
         MENU_OPTIONS.put(5, Configuration.class.getMethod("exit"));
     }
 
-    protected Map<Integer, String> ALGORITHM_OPTIONS = new HashMap<>();
-
-    {
+    private static final Map<Integer, String> ALGORITHM_OPTIONS = new HashMap<>();
+    static {
         ALGORITHM_OPTIONS.put(1, "Backtracking");
         ALGORITHM_OPTIONS.put(2, "Peter Norvig");
         ALGORITHM_OPTIONS.put(3, "Other");
     }
 
-    protected Map<Integer, String> LEVELS_OPTIONS = new HashMap<>();
-
-    {
+    private static final Map<Integer, String> LEVELS_OPTIONS = new HashMap<>();
+    static {
         LEVELS_OPTIONS.put(1, "Easy");
         LEVELS_OPTIONS.put(2, "Medium");
         LEVELS_OPTIONS.put(3, "Hard");
@@ -42,10 +41,13 @@ public class Configuration extends Console {
     }
 
     public Configuration() throws NoSuchMethodException {
-
+        //Do nothing
     }
 
-    public void start(){
+    /**
+     * Start the Configuration console interface
+     */
+    public void start() {
 
         do {
             display("------Configuration Settings------" + "\n");
@@ -61,13 +63,13 @@ public class Configuration extends Console {
         } while (!exit);
     }
 
-    public void selectOption(int option) {
+    private void selectOption(int option) {
         try {
             MENU_OPTIONS.get(option).invoke(this, null);
         } catch (IllegalAccessException e) {
-            org.apache.log4j.Logger.getLogger(PropertiesWriter.class).error("The method is inaccessible", e);
+            Logger.getLogger(Configuration.class).error("The method is inaccessible", e);
         } catch (InvocationTargetException e) {
-            org.apache.log4j.Logger.getLogger(PropertiesWriter.class).error("The method throws an exception.", e);
+            Logger.getLogger(Configuration.class).error("The method throws an exception.", e);
         }
     }
 
@@ -88,7 +90,7 @@ public class Configuration extends Console {
         selectLevel(option);
     }
 
-    public void selectLevel(int option) {
+    private void selectLevel(int option) {
         String value = LEVELS_OPTIONS.get(option);
         propertiesWriter.setProperty(PropertiesWriter.LEVEL, value);
     }
@@ -103,7 +105,7 @@ public class Configuration extends Console {
         selectAlgorithm(option);
     }
 
-    public void selectAlgorithm(int option) {
+    private void selectAlgorithm(int option) {
         String value = ALGORITHM_OPTIONS.get(option);
         propertiesWriter.setProperty(PropertiesWriter.ALGORITHM, value);
     }
