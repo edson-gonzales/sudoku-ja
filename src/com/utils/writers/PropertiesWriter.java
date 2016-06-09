@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -29,6 +31,23 @@ public class PropertiesWriter {
     public static final String MEDIUM_MAX = "MEDIUM_MAX";
     public static final String HARD_MAX = "HARD_MAX";
     public static final String CUSTOM_MAX = "CUSTOM_MAX";
+
+    public static Map<String, CONFIG> CONFIG_MAP = new HashMap<>();
+    {
+        CONFIG_MAP.put(ALGORITHM, CONFIG.ALGORITHM);
+        CONFIG_MAP.put(OUTPUT_PATH, CONFIG.OUTPUT_PATH);
+        CONFIG_MAP.put(OUTPUT_FILE_NAME, CONFIG.OUTPUT_FILE_NAME);
+        CONFIG_MAP.put(LEVEL, CONFIG.LEVEL);
+        CONFIG_MAP.put(CHARACTER, CONFIG.CHARACTER);
+        CONFIG_MAP.put(EASY_MIN, CONFIG.EASY_MIN);
+        CONFIG_MAP.put(MEDIUM_MIN, CONFIG.MEDIUM_MIN);
+        CONFIG_MAP.put(HARD_MIN, CONFIG.HARD_MIN);
+        CONFIG_MAP.put(CUSTOM_MIN, CONFIG.CUSTOM_MIN);
+        CONFIG_MAP.put(EASY_MAX, CONFIG.EASY_MAX);
+        CONFIG_MAP.put(MEDIUM_MAX, CONFIG.MEDIUM_MAX);
+        CONFIG_MAP.put(HARD_MAX, CONFIG.HARD_MAX);
+        CONFIG_MAP.put(CUSTOM_MAX, CONFIG.CUSTOM_MAX);
+    }
 
     public enum CONFIG {
         ALGORITHM("BackTracking"),
@@ -60,7 +79,7 @@ public class PropertiesWriter {
         }
     }
 
-    public PropertiesWriter() {
+    public PropertiesWriter() throws NoSuchMethodException {
         file = new File(CONFIG_PATH);
         if (!file.exists()) {
             setProperties();
@@ -114,48 +133,13 @@ public class PropertiesWriter {
      * @param value the value that will be assigned to this key
      */
     public void setProperty(String key, String value) {
-        switch (key) {
-            case ALGORITHM:
-                CONFIG.ALGORITHM.setValue(value);
-                break;
-            case OUTPUT_FILE_NAME:
-                CONFIG.OUTPUT_FILE_NAME.setValue(value);
-                break;
-            case OUTPUT_PATH:
-                CONFIG.OUTPUT_PATH.setValue(value);
-                break;
-            case LEVEL:
-                CONFIG.LEVEL.setValue(value);
-                break;
-            case CHARACTER:
-                CONFIG.CHARACTER.setValue(value);
-                break;
-            case EASY_MIN:
-                CONFIG.EASY_MIN.setValue(value);
-                break;
-            case MEDIUM_MIN:
-                CONFIG.MEDIUM_MIN.setValue(value);
-                break;
-            case HARD_MIN:
-                CONFIG.HARD_MIN.setValue(value);
-                break;
-            case CUSTOM_MIN:
-                CONFIG.CUSTOM_MIN.setValue(value);
-                break;
-            case EASY_MAX:
-                CONFIG.EASY_MAX.setValue(value);
-            case MEDIUM_MAX:
-                CONFIG.MEDIUM_MAX.setValue(value);
-                break;
-            case HARD_MAX:
-                CONFIG.HARD_MAX.setValue(value);
-                break;
-            case CUSTOM_MAX:
-                CONFIG.CUSTOM_MAX.setValue(value);
-                break;
-            default:
-                break;
-        }
+        CONFIG config = CONFIG_MAP.get(key);
+        getConfigEnum(config, value);
         setProperties();
+
+    }
+
+    public static void getConfigEnum(CONFIG config, String value){
+        config.setValue(value);
     }
 }

@@ -13,7 +13,7 @@ public class PropertiesTest {
     String algorithm, outputPath, outputName, level, character;
 
     @Test
-    public void verifyIfPropertiesFileIsCreatedDefaultValues() {
+    public void verifyIfPropertiesFileIsCreatedDefaultValues() throws NoSuchMethodException {
         PropertiesWriter propertiesWriter = new PropertiesWriter();
         propertiesWriter.setProperties();
         PropertiesReader propertiesReader = new PropertiesReader();
@@ -29,7 +29,7 @@ public class PropertiesTest {
     }
 
     @Test
-    public void verifyIfAlgorithmPropertyCanBeChanged() {
+    public void verifyIfAlgorithmPropertyCanBeChanged() throws NoSuchMethodException{
         PropertiesWriter propertiesWriter = new PropertiesWriter();
         propertiesWriter.setProperties();
         propertiesWriter.setProperty(CONFIG.ALGORITHM.name(), "Peter Norvig");
@@ -40,7 +40,7 @@ public class PropertiesTest {
     }
 
     @Test
-    public void verifyIfOutPutPathPropertyCanBeChanged() {
+    public void verifyIfOutPutPathPropertyCanBeChanged() throws NoSuchMethodException{
         PropertiesWriter propertiesWriter = new PropertiesWriter();
         propertiesWriter.setProperties();
         propertiesWriter.setProperty(CONFIG.OUTPUT_PATH.name(), "C:/");
@@ -51,7 +51,7 @@ public class PropertiesTest {
     }
 
     @Test
-    public void verifyIfOutputNamePropertyValueCanBeChanged() {
+    public void verifyIfOutputNamePropertyValueCanBeChanged() throws NoSuchMethodException {
         PropertiesWriter propertiesWriter = new PropertiesWriter();
         propertiesWriter.setProperties();
         propertiesWriter.setProperty(CONFIG.OUTPUT_FILE_NAME.name(), "Modified Name");
@@ -62,7 +62,7 @@ public class PropertiesTest {
     }
 
     @Test
-    public void verifyIfLevelPropertyValueCanBeChanged() {
+    public void verifyIfLevelPropertyValueCanBeChanged() throws NoSuchMethodException {
         PropertiesWriter propertiesWriter = new PropertiesWriter();
         propertiesWriter.setProperties();
         propertiesWriter.setProperty(CONFIG.LEVEL.name(), "Modified Name");
@@ -73,7 +73,7 @@ public class PropertiesTest {
     }
 
     @Test
-    public void verifyIfCharacterPropertyValueCanBeChanged() {
+    public void verifyIfCharacterPropertyValueCanBeChanged() throws NoSuchMethodException{
         PropertiesWriter propertiesWriter = new PropertiesWriter();
         propertiesWriter.setProperties();
         propertiesWriter.setProperty(CONFIG.CHARACTER.name(), "Modified Name");
@@ -85,7 +85,7 @@ public class PropertiesTest {
     }
 
     @Test
-    public void verifyIfPropertyValueCanBeChanged() {
+    public void verifyIfPropertyValueCanBeChanged() throws NoSuchMethodException{
         PropertiesWriter propertiesWriter = new PropertiesWriter();
         propertiesWriter.setProperties();
         propertiesWriter.setProperty(CONFIG.ALGORITHM.name(), "Peter Norvig");
