@@ -1,16 +1,15 @@
 package com.algorithm.exactcover;
 
-import com.algorithm.exactcover.nodes.DancingNode;
 import com.sudoku.SudokuBoard;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * This class represent the exact cover algorithm
+ *
  */
 public class ExactCover {
-    private SudokuBoard sudokuBoard;
+    private SudokuBoard board;
     private int size = SudokuBoard.SIZE;
     private int side = 3;
     private int number;
@@ -22,6 +21,7 @@ public class ExactCover {
     }
 
     /**
+     *
      * @param sudoku
      * @return
      */
@@ -129,51 +129,18 @@ public class ExactCover {
     /**
      * Solve a sudoku board game
      *
-     * @param sudoku The sudoku board of cells
+     * @param sudokuBoard The sudoku board of cells
      * @return The condition of game result
      */
-    protected boolean solve(int[][] sudoku) {
-        int[][] cover = makeExactCoverGrid(sudoku);
+    protected SudokuBoard solve(SudokuBoard sudokuBoard) {
+        int[][] cover = makeExactCoverGrid(sudokuBoard.parseToArray());
         DancingLinks dlx = new DancingLinks(cover, new ExactCover());
-        this.sudokuBoard = dlx.runSolver();
-        if(!this.sudokuBoard.hasAnEmptyCell()){
-            return true;
-        }
-        return false;
-    }
+        this.board = dlx.runSolver();
 
-    /**
-     * Parse the board
-     *
-     * @param answer
-     * @return
-     */
-    private int[][] parseBoard(List<DancingNode> answer) {
-        int[][] result = new int[size][size];
-        for (DancingNode actualNode : answer) {
-            DancingNode rcNode = actualNode;
-            int min = Integer.parseInt(rcNode.getC().getName());
-            for (DancingNode temp = actualNode.getRight(); temp != actualNode; temp = temp.getRight()) {
-                int val = Integer.parseInt(temp.getC().getName());
-                if (val < min) {
-                    min = val;
-                    rcNode = temp;
-                }
-            }
-            int ans1 = Integer.parseInt(rcNode.getC().getName());
-            int ans2 = Integer.parseInt(rcNode.getRight().getC().getName());
-            int r = ans1 / size;
-            int c = ans1 % size;
-            int num = (ans2 % size) + 1;
-            result[r][c] = num;
+        if(!this.board.hasAnEmptyCell()){
+//            return true;
         }
-        return result;
-    }
-
-    public SudokuBoard handleSolution(List<DancingNode> answer) {
-        int[][] result = parseBoard(answer);
-        SudokuBoard sudokuBoard = new SudokuBoard(result);
-        return sudokuBoard;
+        return this.board;
     }
 
     public static void main(String[] args) {
@@ -188,7 +155,7 @@ public class ExactCover {
                 {0, 0, 5, 2, 0, 6, 3, 0, 0}};
         ExactCover exactCover = new ExactCover();
         SudokuBoard sudokuBoard = new SudokuBoard(covers);
-        System.out.println(exactCover.solve(covers));
+        System.out.println(exactCover.solve(sudokuBoard));
         System.out.println(sudokuBoard.toString());
     }
 }

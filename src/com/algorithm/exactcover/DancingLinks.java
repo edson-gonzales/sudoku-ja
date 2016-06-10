@@ -2,6 +2,7 @@ package com.algorithm.exactcover;
 
 import com.algorithm.exactcover.nodes.ColumnNode;
 import com.algorithm.exactcover.nodes.DancingNode;
+import com.sudoku.Cell;
 import com.sudoku.SudokuBoard;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class DancingLinks{
     private ExactCover exactCover;
     private List<DancingNode> answer;
     private SudokuBoard sudokuBoard;
-
+    private int size = SudokuBoard.SIZE;
     /**
      *
      *
@@ -27,7 +28,7 @@ public class DancingLinks{
      */
     private SudokuBoard search(int k){
         if (header.getRight() == header){ // all the columns removed
-             sudokuBoard = exactCover.handleSolution(answer);
+             sudokuBoard = parseBoard(answer);
         } else{
             ColumnNode columnNode = selectColumnNodeHeuristic();
             columnNode.cover();
@@ -46,6 +47,34 @@ public class DancingLinks{
             columnNode.uncover();
         }
         return sudokuBoard;
+    }
+
+    /**
+     * Parse the board
+     *
+     * @param answer
+     * @return
+     */
+    private SudokuBoard parseBoard(List<DancingNode> answer) {
+        SudokuBoard result = new SudokuBoard();
+        for (DancingNode actualNode : answer) {
+            DancingNode rcNode = actualNode;
+            int min = Integer.parseInt(rcNode.getC().getName());
+            for (DancingNode temp = actualNode.getRight(); temp != actualNode; temp = temp.getRight()) {
+                int val = Integer.parseInt(temp.getC().getName());
+                if (val < min) {
+                    min = val;
+                    rcNode = temp;
+                }
+            }
+            int ans1 = Integer.parseInt(rcNode.getC().getName());
+            int ans2 = Integer.parseInt(rcNode.getRight().getC().getName());
+            int row = ans1 / size;
+            int col = ans1 % size;
+            int num = (ans2 % size) + 1;
+            result.setCell(new Cell(row,col),num);
+        }
+        return result;
     }
 
     /**
