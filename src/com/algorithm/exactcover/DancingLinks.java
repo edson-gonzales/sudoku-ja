@@ -15,11 +15,9 @@ import java.util.List;
 public class DancingLinks{
 
     public ColumnNode header;
-    private SolutionHandler handler;
+    private ExactCover exactCover;
     private List<DancingNode> answer;
     private SudokuBoard sudokuBoard;
-
-    // Heart of the algorithm
 
     /**
      *
@@ -29,7 +27,7 @@ public class DancingLinks{
      */
     private SudokuBoard search(int k){
         if (header.getRight() == header){ // all the columns removed
-             sudokuBoard = handler.handleSolution(answer);
+             sudokuBoard = exactCover.handleSolution(answer);
         } else{
             ColumnNode columnNode = selectColumnNodeHeuristic();
             columnNode.cover();
@@ -67,9 +65,12 @@ public class DancingLinks{
         return ret;
     }
 
-    // grid is a grid of 0s and 1s to solve the exact cover for
-    // returns the root column header node
-    private ColumnNode makeDLXBoard(int[][] grid){
+    /**
+     *
+     * @param grid grid is a grid of 0s and 1s to solve the exact cover for
+     * @return the root column header node
+     */
+    private ColumnNode makeDancingLinksBoard(int[][] grid){
         final int COLS = grid[0].length;
         final int ROWS = grid.length;
 
@@ -103,12 +104,20 @@ public class DancingLinks{
         return headerNode;
     }
 
-    // Grid consists solely of 1s and 0s. Undefined behaviour otherwise
-    public DancingLinks(int[][] grid, SolutionHandler h){
-        header = makeDLXBoard(grid);
-        handler = h;
+    /**
+     * Grid consists solely of 1s and 0s. Undefined behaviour otherwise
+     * @param grid
+     * @param h
+     */
+    public DancingLinks(int[][] grid, ExactCover h){
+        header = makeDancingLinksBoard(grid);
+        exactCover = h;
     }
 
+    /**
+     *
+     * @return
+     */
     public SudokuBoard runSolver(){
         answer = new LinkedList<>();
         return search(0);
