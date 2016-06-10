@@ -12,7 +12,8 @@ public class Menu extends Console{
             display("-----------Menu-----------" + "\n");
             display("1.Start Game");
             display("2.Configuration");
-            display("3.Exit");
+            display("3.Resolve sudoku");
+            display("4.Exit");
             display("Select an option:");
             input = new Scanner(System.in);
             int option = input.nextInt();
@@ -33,6 +34,17 @@ public class Menu extends Console{
                     }
                     break;
                 case 3:
+                    Resolver resolver = null;
+                    try {
+                        resolver = new Resolver();
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+                    if (resolver != null) {
+                        resolver.start();
+                    }
+                    break;
+                case 4:
                     display("Exit");
                     exit = true;
                     break;
