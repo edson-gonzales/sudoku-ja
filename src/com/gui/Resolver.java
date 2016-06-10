@@ -68,7 +68,7 @@ public class Resolver extends Console {
     public void resolveFromFile() {
         String inputPath = enterInputPath();
         SudokuBoard sudokuBoard = getSudokuFromPath(inputPath);
-        if(sudokuBoard.equals(null)) {
+        if(sudokuBoard == null) {
             display("Error:: The size is incorrect!");
             resolveFromFile();
         }
@@ -91,9 +91,6 @@ public class Resolver extends Console {
     private SudokuBoard getSudokuFromPath(String inputPath) {
         SudokuReader reader = new SudokuReader(inputPath);
         SudokuBoard board = reader.getSudokuBoard();
-        if(board.equals(null)) {
-            return null;
-        }
         return board;
     }
 
@@ -127,7 +124,13 @@ public class Resolver extends Console {
     public void resolveFromConsole() {
         String sudokuString = enterSudoku();
         SudokuBoard sudokuBoard = getSudokuFromConsole(sudokuString);
-        Algorithm algorithm = getAlgorithm();
-        resolveSudoku(algorithm, sudokuBoard);
+        if(sudokuBoard == null) {
+            display("Error:: The size is incorrect!");
+            resolveFromConsole();
+        }
+        else {
+            Algorithm algorithm = getAlgorithm();
+            resolveSudoku(algorithm, sudokuBoard);
+        }
     }
 }

@@ -52,7 +52,8 @@ public class SudokuReader {
         int[][] grid = new int[BOARD_SIZE][BOARD_SIZE];
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
-                    grid[row][col] = text.charAt(iterator) - ASCCI_ZERO;
+                grid[row][col] = text.charAt(iterator) - ASCCI_ZERO;
+                iterator++;
             }
         }
         return new SudokuBoard(grid);
