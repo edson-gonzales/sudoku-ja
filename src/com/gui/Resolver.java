@@ -46,7 +46,7 @@ public class Resolver extends Console {
         do {
             display("------Resolver Sudoku------" + "\n");
             display("1.Read from a CSV/TXT file");
-            display("2.Read from a Console");
+            display("2.Read from Console");
             display("3.Exit");
             display("Select an option:");
             input = new Scanner(System.in);
@@ -68,8 +68,14 @@ public class Resolver extends Console {
     public void resolveFromFile() {
         String inputPath = enterInputPath();
         SudokuBoard sudokuBoard = getSudokuFromPath(inputPath);
-        Algorithm algorithm = getAlgorithm();
-        resolveSudoku(algorithm, sudokuBoard);
+        if(sudokuBoard.equals(null)) {
+            display("Error:: The size is incorrect!");
+            resolveFromFile();
+        }
+        else {
+            Algorithm algorithm = getAlgorithm();
+            resolveSudoku(algorithm, sudokuBoard);
+        }
     }
 
     private String enterInputPath() {
@@ -77,9 +83,23 @@ public class Resolver extends Console {
         return input.next();
     }
 
+    private String enterSudoku() {
+        display("Enter sudoku string:");
+        return input.next();
+    }
+
     private SudokuBoard getSudokuFromPath(String inputPath) {
-        SudokuReader readerTxt = new SudokuReader(inputPath);
-        return readerTxt.getSudokuBoard();
+        SudokuReader reader = new SudokuReader(inputPath);
+        SudokuBoard board = reader.getSudokuBoard();
+        if(board.equals(null)) {
+            return null;
+        }
+        return board;
+    }
+
+    private SudokuBoard getSudokuFromConsole(String sudokuString) {
+        SudokuReader reader = new SudokuReader();
+        return reader.getSudokuBoardFromString(sudokuString);
     }
 
     private Algorithm getAlgorithm() {
@@ -105,6 +125,9 @@ public class Resolver extends Console {
     }
 
     public void resolveFromConsole() {
-        // resolve from console
+        String sudokuString = enterSudoku();
+        SudokuBoard sudokuBoard = getSudokuFromConsole(sudokuString);
+        Algorithm algorithm = getAlgorithm();
+        resolveSudoku(algorithm, sudokuBoard);
     }
 }
