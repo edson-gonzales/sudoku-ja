@@ -1,5 +1,7 @@
 package com.utils.writers;
 
+import com.utils.readers.PropertiesReader;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,18 +15,20 @@ import java.util.Date;
  */
 public class WriterManager {
 
+    private static PropertiesReader propertiesReader = new PropertiesReader();
+
     /**
      * Export a new file with txt extension
      *
      * @param str The string that contains the text to be written
      */
     public static void exportTxtFile(String str) throws IOException {
-
-        String folder = "./results";
+        String folder = propertiesReader.getProperty("OUTPUT_PATH");
+        String fileName = propertiesReader.getProperty("OUTPUT_FILE_NAME");
         new File(folder).mkdirs();
 
         DateFormat dateFormat = new SimpleDateFormat("dd_MMM_yyyy_hh_mm_ssaa");
-        String nameFile = "sudoku_" + dateFormat.format(new Date()) + ".txt";
+        String nameFile = fileName + "_" + dateFormat.format(new Date()) + ".txt";
 
         String filePath = folder + File.separator + nameFile;
 

@@ -50,7 +50,7 @@ public class PropertiesWriter {
     }
 
     public enum CONFIG {
-        ALGORITHM("BackTracking"),
+        ALGORITHM("Backtracking"),
         OUTPUT_PATH("./"),
         OUTPUT_FILE_NAME("defaultName"),
         LEVEL("Easy"),
