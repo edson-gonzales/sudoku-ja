@@ -2,7 +2,6 @@ package com.algorithm.exactcover;
 
 import com.algorithm.exactcover.nodes.ColumnNode;
 import com.algorithm.exactcover.nodes.DancingNode;
-import com.sudoku.Cell;
 import com.sudoku.SudokuBoard;
 
 import java.util.ArrayList;
@@ -11,36 +10,35 @@ import java.util.List;
 
 /**
  * This class represent the dancing node
- *
  */
-public class DancingLinks{
+public class DancingLinks {
 
     public ColumnNode header;
-    private ExactCover exactCover;
     private List<DancingNode> answer;
     private SudokuBoard sudokuBoard;
     private int size = SudokuBoard.SIZE;
+
     /**
-     *
+     * all the columns removed
      *
      * @param k
      * @return
      */
-    private SudokuBoard search(int k){
-        if (header.getRight() == header){ // all the columns removed
-             sudokuBoard = parseBoard(answer);
-        } else{
+    private SudokuBoard search(int k) {
+        if (header.getRight() == header) {
+            sudokuBoard = parseBoard(answer);
+        } else {
             ColumnNode columnNode = selectColumnNodeHeuristic();
             columnNode.cover();
-            for(DancingNode r = columnNode.getDown(); r != columnNode; r = r.getDown()){
+            for (DancingNode r = columnNode.getDown(); r != columnNode; r = r.getDown()) {
                 answer.add(r);
-                for(DancingNode j = r.getRight(); j != r; j = j.getRight()){
+                for (DancingNode j = r.getRight(); j != r; j = j.getRight()) {
                     j.getC().cover();
                 }
                 search(k + 1);
                 r = answer.remove(answer.size() - 1);
                 columnNode = r.getC();
-                for(DancingNode j = r.getLeft(); j != r; j = j.getLeft()){
+                for (DancingNode j = r.getLeft(); j != r; j = j.getLeft()) {
                     j.getC().uncover();
                 }
             }
@@ -56,6 +54,7 @@ public class DancingLinks{
      * @return
      */
     private SudokuBoard parseBoard(List<DancingNode> answer) {
+        this.sudokuBoard = ExactCover.board;
         SudokuBoard result = new SudokuBoard();
         for (DancingNode actualNode : answer) {
             DancingNode rcNode = actualNode;
@@ -72,7 +71,7 @@ public class DancingLinks{
             int row = ans1 / size;
             int col = ans1 % size;
             int num = (ans2 % size) + 1;
-            result.setCell(new Cell(row,col),num);
+            result.setCell(sudokuBoard.getCell(row, col), num);
         }
         return result;
     }
@@ -82,48 +81,49 @@ public class DancingLinks{
      *
      * @return ret
      */
-    private ColumnNode selectColumnNodeHeuristic(){
+    private ColumnNode selectColumnNodeHeuristic() {
         int min = Integer.MAX_VALUE;
         ColumnNode ret = null;
-        for(ColumnNode c = (ColumnNode) header.getRight(); c != header; c = (ColumnNode) c.getRight()){
-            if (c.getSize() < min){
-                min = c.getSize();
-                ret = c;
+        for (ColumnNode columnNode = (ColumnNode) header.getRight(); columnNode != header; columnNode = (ColumnNode) columnNode.getRight()) {
+            if (columnNode.getSize() < min) {
+                min = columnNode.getSize();
+                ret = columnNode;
             }
         }
         return ret;
     }
 
     /**
-     *
      * @param grid grid is a grid of 0s and 1s to solve the exact cover for
      * @return the root column header node
      */
-    private ColumnNode makeDancingLinksBoard(int[][] grid){
+    private ColumnNode makeDancingLinksBoard(int[][] grid) {
         final int COLS = grid[0].length;
         final int ROWS = grid.length;
 
+        System.out.println(COLS);
+        System.out.println(ROWS);
         ColumnNode headerNode = new ColumnNode("header");
         ArrayList<ColumnNode> columnNodes = new ArrayList<ColumnNode>();
 
-        for(int i = 0; i < COLS; i++){
+        for (int i = 0; i < COLS; i++) {
             ColumnNode n = new ColumnNode(Integer.toString(i));
             columnNodes.add(n);
             headerNode = (ColumnNode) headerNode.hookRight(n);
         }
         headerNode = headerNode.getRight().getC();
 
-        for(int i = 0; i < ROWS; i++){
+        for (int row = 0; row < ROWS; row++) {
             DancingNode prev = null;
-            for(int j = 0; j < COLS; j++){
-                if (grid[i][j] == 1){
+            for (int j = 0; j < COLS; j++) {
+                if (grid[row][j] == 1) {
                     ColumnNode col = columnNodes.get(j);
                     DancingNode newNode = new DancingNode(col);
                     if (prev == null)
                         prev = newNode;
                     col.getDown().hookDown(newNode);
                     prev = prev.hookRight(newNode);
-                    col.setSize(col.getSize()+1);
+                    col.setSize(col.getSize() + 1);
                 }
             }
         }
@@ -135,19 +135,17 @@ public class DancingLinks{
 
     /**
      * Grid consists solely of 1s and 0s. Undefined behaviour otherwise
+     *
      * @param grid
-     * @param h
      */
-    public DancingLinks(int[][] grid, ExactCover h){
+    public DancingLinks(int[][] grid) {
         header = makeDancingLinksBoard(grid);
-        exactCover = h;
     }
 
     /**
-     *
      * @return
      */
-    public SudokuBoard runSolver(){
+    public SudokuBoard runSolver() {
         answer = new LinkedList<>();
         return search(0);
     }

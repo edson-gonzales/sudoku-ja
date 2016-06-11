@@ -6,30 +6,23 @@ import java.util.Arrays;
 
 /**
  * This class represent the exact cover algorithm
- *
  */
 public class ExactCover {
-    private SudokuBoard board;
+    public static SudokuBoard board;
     private int size = SudokuBoard.SIZE;
     private int side = 3;
     private int number;
     int hBase = 0;
     private int[][] SudokuExactCover = new int[size * size * size][size * size * 4];
 
-    public ExactCover() {
-        size = SudokuBoard.SIZE;
-    }
-
     /**
-     *
-     * @param sudoku
      * @return
      */
-    private int[][] makeExactCoverGrid(int[][] sudoku) {
+    private int[][] makeExactCoverGrid() {
         int[][] ExactCoverBoard = getSudokuExactCover();
         for (int rows = 1; rows <= size; rows++) {
             for (int columns = 1; columns <= size; columns++) {
-                number = sudoku[rows - 1][columns - 1];
+                number = board.getCell(rows - 1, columns - 1).getValue();
                 verifyZerosInGrid(ExactCoverBoard, rows, columns, number);
             }
         }
@@ -57,22 +50,18 @@ public class ExactCover {
      * @return
      */
     private int[][] getSudokuExactCover() {
-
         // row-column constraints
         for (int row = 1; row <= size; row++) {
             iterateRowColumnConstraints(row);
         }
-
         // row-number constraints
         for (int row = 1; row <= size; row++) {
             iterateRowNumberConstraints(row);
         }
-
         // column-number constraints
         for (int column = 1; column <= size; column++) {
             iterateColumnNumberConstraints(column);
         }
-
         // box-number constraints
         for (int boxRow = 1; boxRow <= size; boxRow += side) {
             for (int boxColumn = 1; boxColumn <= size; boxColumn += side) {
@@ -82,7 +71,7 @@ public class ExactCover {
         return SudokuExactCover;
     }
 
-    private void iterateRowColumnConstraints(int row){
+    private void iterateRowColumnConstraints(int row) {
         for (int column = 1; column <= size; column++, hBase++) {
             for (int number = 1; number <= size; number++) {
                 SudokuExactCover[getIndex(row, column, number)][hBase] = 1;
@@ -90,7 +79,7 @@ public class ExactCover {
         }
     }
 
-    private void iterateRowNumberConstraints(int row){
+    private void iterateRowNumberConstraints(int row) {
         for (int number = 1; number <= size; number++, hBase++) {
             for (int column = 1; column <= size; column++) {
                 SudokuExactCover[getIndex(row, column, number)][hBase] = 1;
@@ -98,7 +87,7 @@ public class ExactCover {
         }
     }
 
-    private void iterateColumnNumberConstraints(int column){
+    private void iterateColumnNumberConstraints(int column) {
         for (int number = 1; number <= size; number++, hBase++) {
             for (int row = 1; row <= size; row++) {
                 SudokuExactCover[getIndex(row, column, number)][hBase] = 1;
@@ -106,7 +95,7 @@ public class ExactCover {
         }
     }
 
-    private void iterateBoxNumberConstraints(int boxRow, int boxColumn){
+    private void iterateBoxNumberConstraints(int boxRow, int boxColumn) {
         for (int number = 1; number <= size; number++, hBase++) {
             for (int rDelta = 0; rDelta < side; rDelta++) {
                 for (int cDelta = 0; cDelta < side; cDelta++) {
@@ -132,19 +121,20 @@ public class ExactCover {
      * @param sudokuBoard The sudoku board of cells
      * @return The condition of game result
      */
-    protected SudokuBoard solve(SudokuBoard sudokuBoard) {
-        int[][] cover = makeExactCoverGrid(sudokuBoard.parseToArray());
-        DancingLinks dlx = new DancingLinks(cover, new ExactCover());
+    protected Boolean solve(SudokuBoard sudokuBoard) {
+        this.board = sudokuBoard;
+        int[][] cover = makeExactCoverGrid();
+        DancingLinks dlx = new DancingLinks(cover);
         this.board = dlx.runSolver();
 
-        if(!this.board.hasAnEmptyCell()){
-//            return true;
+        if (!this.board.hasAnEmptyCell()) {
+            return true;
         }
-        return this.board;
+        return false;
     }
 
     public static void main(String[] args) {
-        int[][] covers = {{3, 0, 6, 5, 0, 8, 4, 0, 0},
+        int[][] grid = {{3, 0, 6, 5, 0, 8, 4, 0, 0},
                 {5, 2, 0, 0, 0, 0, 0, 0, 0},
                 {0, 8, 7, 0, 0, 0, 0, 3, 1},
                 {0, 0, 3, 0, 1, 0, 0, 8, 0},
@@ -154,7 +144,7 @@ public class ExactCover {
                 {0, 0, 0, 0, 0, 0, 0, 7, 4},
                 {0, 0, 5, 2, 0, 6, 3, 0, 0}};
         ExactCover exactCover = new ExactCover();
-        SudokuBoard sudokuBoard = new SudokuBoard(covers);
+        SudokuBoard sudokuBoard = new SudokuBoard(grid);
         System.out.println(exactCover.solve(sudokuBoard));
         System.out.println(sudokuBoard.toString());
     }
