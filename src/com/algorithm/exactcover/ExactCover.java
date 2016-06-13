@@ -10,7 +10,7 @@ import java.util.Arrays;
  *
  * @author Jose Cabrera
  */
-public class ExactCover implements Algorithm{
+public class ExactCover implements Algorithm {
     public static SudokuBoard board;
     private int size = SudokuBoard.SIZE;
     private int side = 3;
@@ -19,7 +19,9 @@ public class ExactCover implements Algorithm{
     private int[][] SudokuExactCover = new int[size * size * size][size * size * 4];
 
     /**
-     * @return
+     * Find a set or more of rows in which exactly one 1 will appear for each column.
+     *
+     * @return a grid with exact cover
      */
     private int[][] makeExactCoverGrid() {
         int[][] ExactCoverBoard = getSudokuExactCover();
@@ -48,24 +50,23 @@ public class ExactCover implements Algorithm{
     }
 
     /**
-     * Returns the base exact cover grid for a SUDOKU puzzle
+     * Iterate in different ways to obtain a exact cover grid for a sudoku puzzle
      *
-     * @return
+     * @return sudoku Exact Cover
      */
     private int[][] getSudokuExactCover() {
-        // row-column constraints
         for (int row = 1; row <= size; row++) {
             iterateRowColumnConstraints(row);
         }
-        // row-number constraints
+
         for (int row = 1; row <= size; row++) {
             iterateRowNumberConstraints(row);
         }
-        // column-number constraints
+
         for (int column = 1; column <= size; column++) {
             iterateColumnNumberConstraints(column);
         }
-        // box-number constraints
+
         for (int boxRow = 1; boxRow <= size; boxRow += side) {
             for (int boxColumn = 1; boxColumn <= size; boxColumn += side) {
                 iterateBoxNumberConstraints(boxRow, boxColumn);
@@ -74,6 +75,11 @@ public class ExactCover implements Algorithm{
         return SudokuExactCover;
     }
 
+    /**
+     * Iterate the rows to satisfy the Constraints
+     *
+     * @param row the row that will be iterated
+     */
     private void iterateRowColumnConstraints(int row) {
         for (int column = 1; column <= size; column++, hBase++) {
             for (int number = 1; number <= size; number++) {
@@ -82,6 +88,11 @@ public class ExactCover implements Algorithm{
         }
     }
 
+    /**
+     * Iterate the rows to satisfy the Constraints
+     *
+     * @param row the row that will be iterated
+     */
     private void iterateRowNumberConstraints(int row) {
         for (int number = 1; number <= size; number++, hBase++) {
             for (int column = 1; column <= size; column++) {
@@ -90,6 +101,11 @@ public class ExactCover implements Algorithm{
         }
     }
 
+    /**
+     * Iterate the columns to satisfy the Constraints
+     *
+     * @param column the column that will be iterated
+     */
     private void iterateColumnNumberConstraints(int column) {
         for (int number = 1; number <= size; number++, hBase++) {
             for (int row = 1; row <= size; row++) {
@@ -98,6 +114,12 @@ public class ExactCover implements Algorithm{
         }
     }
 
+    /**
+     * Iterate the box to belong the number to satisfy the Constraints
+     *
+     * @param boxRow    the boxRow that will be iterated
+     * @param boxColumn the boxColumn that will be iterated
+     */
     private void iterateBoxNumberConstraints(int boxRow, int boxColumn) {
         for (int number = 1; number <= size; number++, hBase++) {
             for (int rDelta = 0; rDelta < side; rDelta++) {

@@ -30,8 +30,10 @@ public class DancingLinks {
     }
 
     /**
+     * Puts Exact Cover matrix into a toroidal doubly-linked list
+     * and search the solution
      *
-     * @return
+     * @return a sudoku board solved
      */
     public SudokuBoard searchSolution() {
         answer = new LinkedList<>();
@@ -100,24 +102,25 @@ public class DancingLinks {
     /**
      * Select a column node that accomplish with the dancing link logic
      *
-     * @return ret
+     * @return minorColumnNode the minor column node
      */
     private ColumnNode selectColumnNodeHeuristic() {
         int min = Integer.MAX_VALUE;
-        ColumnNode ret = null;
+        ColumnNode minorColumnNode = null;
         for (ColumnNode columnNode = (ColumnNode) header.getRight(); columnNode != header; columnNode = (ColumnNode) columnNode.getRight()) {
             if (columnNode.getSize() < min) {
                 min = columnNode.getSize();
-                ret = columnNode;
+                minorColumnNode = columnNode;
             }
         }
-        return ret;
+        return minorColumnNode;
     }
 
     /**
-     * @param grid grid is a grid of 0s and 1s to solve the exact cover for
-     * @return the root column header node
+     * Make the dancing link using the exact cover grid
      *
+     * @param grid grid is a grid of 0s and 1s to solve the exact cover
+     * @return the root column header node
      */
     private ColumnNode makeDancingLinksBoard(int[][] grid) {
         final int COLS = grid[0].length;
