@@ -79,7 +79,7 @@ public class PropertiesWriter {
         }
     }
 
-    public PropertiesWriter() throws NoSuchMethodException {
+    public PropertiesWriter(){
         file = new File(CONFIG_PATH);
         if (!file.exists()) {
             setProperties();

@@ -35,6 +35,7 @@ public class Resolver extends Console {
     }
 
     public Resolver() throws NoSuchMethodException {
+        super();
         //Do nothing
     }
 
