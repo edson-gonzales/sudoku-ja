@@ -67,21 +67,6 @@ public class SudokuBoard {
     }
 
     /**
-     * Convert an array of integers to an array of Cells
-     *
-     * @param arrayBoard An array of integers
-     */
-    public int [][] parseToArray() {
-        int [][] board = new int [SIZE][SIZE];
-        for (int row = 0; row < SIZE; row++) {
-            for (int column = 0; column < SIZE; column++) {
-                board[row][column] = getCell(row,column).getValue();
-            }
-        }
-        return board;
-    }
-
-    /**
      * Generate a board with empty cells
      */
     public void generateEmptyBoard() {

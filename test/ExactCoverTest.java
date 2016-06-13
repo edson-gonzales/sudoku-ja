@@ -6,9 +6,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 /**
- * This class represent the unit tests for the PeterNorvig class
+ * This class represent the unit tests for the ExactCover class
  *
- * @author Alejandra Arteaga
+ * @author Jose Cabrera
  */
 public class ExactCoverTest {
     @Test
@@ -27,6 +27,5 @@ public class ExactCoverTest {
         SudokuBoard sudokuBoard = new SudokuBoard(grid);
         Algorithm exactCover = new ExactCover();
         assertTrue(exactCover.solve(sudokuBoard));
-        System.out.println(sudokuBoard);
     }
 }
