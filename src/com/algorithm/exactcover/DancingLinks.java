@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * This class represent the dancing node
+ *
+ * @author Jose Cabrera
  */
 public class DancingLinks {
 
@@ -19,61 +21,80 @@ public class DancingLinks {
     private int size = SudokuBoard.SIZE;
 
     /**
-     * all the columns removed
+     * Grid consists solely of 1s and 0s. Undefined behaviour otherwise
      *
-     * @param k
+     * @param grid
+     */
+    public DancingLinks(int[][] grid) {
+        header = makeDancingLinksBoard(grid);
+    }
+
+    /**
+     *
      * @return
      */
-    private SudokuBoard search(int k) {
+    public SudokuBoard searchSolution() {
+        answer = new LinkedList<>();
+        return search(0);
+    }
+
+    /**
+     * Each Node points to another object up, down, left, right,
+     * and to its corresponding ColumnNode. A special ColumnNode h
+     * points to the first ColumnNode on the left as a starting point for the algorithm.
+     *
+     * @param iterator
+     * @return A sudokuBoard Solved
+     */
+    private SudokuBoard search(int iterator) {
         if (header.getRight() == header) {
             sudokuBoard = parseBoard(answer);
         } else {
-            ColumnNode columnNode = selectColumnNodeHeuristic();
-            columnNode.cover();
-            for (DancingNode r = columnNode.getDown(); r != columnNode; r = r.getDown()) {
-                answer.add(r);
-                for (DancingNode j = r.getRight(); j != r; j = j.getRight()) {
-                    j.getC().cover();
+            ColumnNode currentColumnNode = selectColumnNodeHeuristic();
+            currentColumnNode.cover();
+            for (DancingNode rowNode = currentColumnNode.getDown(); rowNode != currentColumnNode; rowNode = rowNode.getDown()) {
+                answer.add(rowNode);
+                for (DancingNode coverNode = rowNode.getRight(); coverNode != rowNode; coverNode = coverNode.getRight()) {
+                    coverNode.getColumnNode().cover();
                 }
-                search(k + 1);
-                r = answer.remove(answer.size() - 1);
-                columnNode = r.getC();
-                for (DancingNode j = r.getLeft(); j != r; j = j.getLeft()) {
-                    j.getC().uncover();
+                search(iterator + 1);
+                rowNode = answer.remove(answer.size() - 1);
+                currentColumnNode = rowNode.getColumnNode();
+                for (DancingNode uncoverNode = rowNode.getLeft(); uncoverNode != rowNode; uncoverNode = uncoverNode.getLeft()) {
+                    uncoverNode.getColumnNode().uncover();
                 }
             }
-            columnNode.uncover();
+            currentColumnNode.uncover();
         }
         return sudokuBoard;
     }
 
     /**
-     * Parse the board
+     * Parse the board to find a solution
      *
-     * @param answer
-     * @return
+     * @param answer the linked list to iterate using dancing links
+     * @return SudokuBoard with the answer of
      */
     private SudokuBoard parseBoard(List<DancingNode> answer) {
         this.sudokuBoard = ExactCover.board;
-        SudokuBoard result = new SudokuBoard();
         for (DancingNode actualNode : answer) {
             DancingNode rcNode = actualNode;
-            int min = Integer.parseInt(rcNode.getC().getName());
+            int min = Integer.parseInt(rcNode.getColumnNode().getName());
             for (DancingNode temp = actualNode.getRight(); temp != actualNode; temp = temp.getRight()) {
-                int val = Integer.parseInt(temp.getC().getName());
+                int val = Integer.parseInt(temp.getColumnNode().getName());
                 if (val < min) {
                     min = val;
                     rcNode = temp;
                 }
             }
-            int ans1 = Integer.parseInt(rcNode.getC().getName());
-            int ans2 = Integer.parseInt(rcNode.getRight().getC().getName());
+            int ans1 = Integer.parseInt(rcNode.getColumnNode().getName());
+            int ans2 = Integer.parseInt(rcNode.getRight().getColumnNode().getName());
             int row = ans1 / size;
             int col = ans1 % size;
             int num = (ans2 % size) + 1;
-            result.setCell(sudokuBoard.getCell(row, col), num);
+            sudokuBoard.setCell(sudokuBoard.getCell(row, col), num);
         }
-        return result;
+        return sudokuBoard;
     }
 
     /**
@@ -96,13 +117,12 @@ public class DancingLinks {
     /**
      * @param grid grid is a grid of 0s and 1s to solve the exact cover for
      * @return the root column header node
+     *
      */
     private ColumnNode makeDancingLinksBoard(int[][] grid) {
         final int COLS = grid[0].length;
         final int ROWS = grid.length;
 
-        System.out.println(COLS);
-        System.out.println(ROWS);
         ColumnNode headerNode = new ColumnNode("header");
         ArrayList<ColumnNode> columnNodes = new ArrayList<ColumnNode>();
 
@@ -111,13 +131,13 @@ public class DancingLinks {
             columnNodes.add(n);
             headerNode = (ColumnNode) headerNode.hookRight(n);
         }
-        headerNode = headerNode.getRight().getC();
+        headerNode = headerNode.getRight().getColumnNode();
 
         for (int row = 0; row < ROWS; row++) {
             DancingNode prev = null;
-            for (int j = 0; j < COLS; j++) {
-                if (grid[row][j] == 1) {
-                    ColumnNode col = columnNodes.get(j);
+            for (int column = 0; column < COLS; column++) {
+                if (grid[row][column] == 1) {
+                    ColumnNode col = columnNodes.get(column);
                     DancingNode newNode = new DancingNode(col);
                     if (prev == null)
                         prev = newNode;
@@ -131,22 +151,5 @@ public class DancingLinks {
         headerNode.setSize(COLS);
 
         return headerNode;
-    }
-
-    /**
-     * Grid consists solely of 1s and 0s. Undefined behaviour otherwise
-     *
-     * @param grid
-     */
-    public DancingLinks(int[][] grid) {
-        header = makeDancingLinksBoard(grid);
-    }
-
-    /**
-     * @return
-     */
-    public SudokuBoard runSolver() {
-        answer = new LinkedList<>();
-        return search(0);
     }
 }

@@ -1,13 +1,16 @@
 package com.algorithm.exactcover;
 
+import com.algorithm.Algorithm;
 import com.sudoku.SudokuBoard;
 
 import java.util.Arrays;
 
 /**
  * This class represent the exact cover algorithm
+ *
+ * @author Jose Cabrera
  */
-public class ExactCover {
+public class ExactCover implements Algorithm{
     public static SudokuBoard board;
     private int size = SudokuBoard.SIZE;
     private int side = 3;
@@ -121,31 +124,15 @@ public class ExactCover {
      * @param sudokuBoard The sudoku board of cells
      * @return The condition of game result
      */
-    protected Boolean solve(SudokuBoard sudokuBoard) {
+    @Override
+    public Boolean solve(SudokuBoard sudokuBoard) {
         this.board = sudokuBoard;
         int[][] cover = makeExactCoverGrid();
         DancingLinks dlx = new DancingLinks(cover);
-        this.board = dlx.runSolver();
-
+        this.board = dlx.searchSolution();
         if (!this.board.hasAnEmptyCell()) {
             return true;
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        int[][] grid = {{3, 0, 6, 5, 0, 8, 4, 0, 0},
-                {5, 2, 0, 0, 0, 0, 0, 0, 0},
-                {0, 8, 7, 0, 0, 0, 0, 3, 1},
-                {0, 0, 3, 0, 1, 0, 0, 8, 0},
-                {9, 0, 0, 8, 6, 3, 0, 0, 5},
-                {0, 5, 0, 0, 9, 0, 6, 0, 0},
-                {1, 3, 0, 0, 0, 0, 2, 5, 0},
-                {0, 0, 0, 0, 0, 0, 0, 7, 4},
-                {0, 0, 5, 2, 0, 6, 3, 0, 0}};
-        ExactCover exactCover = new ExactCover();
-        SudokuBoard sudokuBoard = new SudokuBoard(grid);
-        System.out.println(exactCover.solve(sudokuBoard));
-        System.out.println(sudokuBoard.toString());
     }
 }
