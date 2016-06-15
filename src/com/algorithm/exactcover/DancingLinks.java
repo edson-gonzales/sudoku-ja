@@ -80,20 +80,20 @@ public class DancingLinks {
     private SudokuBoard parseBoard(List<DancingNode> answer) {
         this.sudokuBoard = ExactCover.board;
         for (DancingNode actualNode : answer) {
-            DancingNode rcNode = actualNode;
-            int min = Integer.parseInt(rcNode.getColumnNode().getName());
-            for (DancingNode temp = actualNode.getRight(); temp != actualNode; temp = temp.getRight()) {
-                int val = Integer.parseInt(temp.getColumnNode().getName());
+            DancingNode rowAndColNode = actualNode;
+            int min = Integer.parseInt(rowAndColNode.getColumnNode().getName());
+            for (DancingNode iterateNode = actualNode.getRight(); iterateNode != actualNode; iterateNode = iterateNode.getRight()) {
+                int val = Integer.parseInt(iterateNode.getColumnNode().getName());
                 if (val < min) {
                     min = val;
-                    rcNode = temp;
+                    rowAndColNode = iterateNode;
                 }
             }
-            int ans1 = Integer.parseInt(rcNode.getColumnNode().getName());
-            int ans2 = Integer.parseInt(rcNode.getRight().getColumnNode().getName());
-            int row = ans1 / size;
-            int col = ans1 % size;
-            int num = (ans2 % size) + 1;
+            int columnNodeValue = Integer.parseInt(rowAndColNode.getColumnNode().getName());
+            int numDancingValue = Integer.parseInt(rowAndColNode.getRight().getColumnNode().getName());
+            int row = columnNodeValue / size;
+            int col = columnNodeValue % size;
+            int num = (numDancingValue % size) + 1;
             sudokuBoard.setCell(sudokuBoard.getCell(row, col), num);
         }
         return sudokuBoard;
@@ -137,15 +137,15 @@ public class DancingLinks {
         headerNode = headerNode.getRight().getColumnNode();
 
         for (int row = 0; row < ROWS; row++) {
-            DancingNode prev = null;
+            DancingNode previousNode = null;
             for (int column = 0; column < COLS; column++) {
                 if (grid[row][column] == 1) {
                     ColumnNode col = columnNodes.get(column);
                     DancingNode newNode = new DancingNode(col);
-                    if (prev == null)
-                        prev = newNode;
+                    if (previousNode == null)
+                        previousNode = newNode;
                     col.getDown().hookDown(newNode);
-                    prev = prev.hookRight(newNode);
+                    previousNode = previousNode.hookRight(newNode);
                     col.setSize(col.getSize() + 1);
                 }
             }

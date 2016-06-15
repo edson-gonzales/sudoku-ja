@@ -43,9 +43,9 @@ public class DancingNode{
     }
 
     /**
-     * hooks node dancingNode below current node
-     * @param dancingNode
-     * @return
+     * Hooks node dancingNode below current node
+     * @param dancingNode is the node to dance
+     * @return the node that accomplish with the assert condition
      */
     public DancingNode hookDown(DancingNode dancingNode){
         assert (getColumnNode() == dancingNode.getColumnNode());
@@ -58,8 +58,8 @@ public class DancingNode{
 
     /**
      * hooks the dancingNode to the right of the current node
-     * @param dancingNode
-     * @return
+     * @param dancingNode is the node to dance
+     * @return the node after dance with it
      */
     public DancingNode hookRight(DancingNode dancingNode){
         dancingNode.right = this.right;
