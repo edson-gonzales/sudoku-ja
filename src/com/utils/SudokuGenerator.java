@@ -4,6 +4,7 @@ import com.algorithm.Algorithm;
 import com.algorithm.Backtracking;
 import com.sudoku.Cell;
 import com.sudoku.SudokuBoard;
+import com.utils.writers.WriterManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class SudokuGenerator {
      * @param maxComplexity The max empty cells per subGrid
      * @return The sudoku board generated
      */
-    public static void generate(int minComplexity, int maxComplexity) {
+    public static SudokuBoard generate(int minComplexity, int maxComplexity) {
         setOneCellOnSubGrids();
 
         Algorithm backtracking = new Backtracking();
@@ -34,6 +35,7 @@ public class SudokuGenerator {
         clearNCellsOnSubGrids(minComplexity, maxComplexity);
 
         exportSudokuGame();
+        return board;
     }
 
     /**
