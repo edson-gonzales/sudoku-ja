@@ -3,6 +3,7 @@ package com.gui;
 import com.algorithm.Algorithm;
 import com.algorithm.Backtracking;
 import com.algorithm.PeterNorvig;
+import com.algorithm.exactcover.ExactCover;
 import com.sudoku.SudokuBoard;
 import com.utils.SudokuGenerator;
 import com.utils.writers.PropertiesWriter;
@@ -13,20 +14,22 @@ import java.util.Map;
 /**
  * This class represent the Game console interface
  */
-public class Game extends Console{
+public class Game extends Console {
     private SudokuBoard board;
     private SudokuBoard solved;
 
     private static final Map<String, Algorithm> ALGORITHM_OPTIONS = new HashMap<>();
+
     static {
         ALGORITHM_OPTIONS.put("Backtracking", new Backtracking());
         ALGORITHM_OPTIONS.put("Peter Norvig", new PeterNorvig());
+        ALGORITHM_OPTIONS.put("Exact Cover", new ExactCover());
     }
 
     private static final Map<String, String> BOTTOM_LIMIT_LEVELS = new HashMap<>();
 
     static {
-        BOTTOM_LIMIT_LEVELS.put("Easy",PropertiesWriter.EASY_MIN);
+        BOTTOM_LIMIT_LEVELS.put("Easy", PropertiesWriter.EASY_MIN);
         BOTTOM_LIMIT_LEVELS.put("Medium", PropertiesWriter.MEDIUM_MIN);
         BOTTOM_LIMIT_LEVELS.put("Hard", PropertiesWriter.HARD_MIN);
         BOTTOM_LIMIT_LEVELS.put("Custom", PropertiesWriter.CUSTOM_MIN);
@@ -38,7 +41,7 @@ public class Game extends Console{
         TOP_LIMIT_LEVELS.put("Easy", PropertiesWriter.EASY_MAX);
         TOP_LIMIT_LEVELS.put("Medium", PropertiesWriter.MEDIUM_MAX);
         TOP_LIMIT_LEVELS.put("Hard", PropertiesWriter.HARD_MAX);
-        TOP_LIMIT_LEVELS.put("Custom",PropertiesWriter.CUSTOM_MAX);
+        TOP_LIMIT_LEVELS.put("Custom", PropertiesWriter.CUSTOM_MAX);
     }
 
     private static final Map<String, Integer> LETTERS = new HashMap<>();
@@ -64,14 +67,14 @@ public class Game extends Console{
         generateSolution();
     }
 
-    private void generateGameBoard(){
+    private void generateGameBoard() {
         String level = propertiesReader.getProperty("LEVEL");
         String minComplexity = propertiesReader.getProperty(BOTTOM_LIMIT_LEVELS.get(level));
         String maxComplexity = propertiesReader.getProperty(TOP_LIMIT_LEVELS.get(level));
         this.board = SudokuGenerator.generate(Integer.parseInt(minComplexity), Integer.parseInt(maxComplexity));
     }
 
-    private void generateSolution(){
+    private void generateSolution() {
         this.solved = new SudokuBoard(this.board.parseToArray());
         String algorithmType = propertiesReader.getProperty("ALGORITHM");
         Algorithm algorithm = ALGORITHM_OPTIONS.get(algorithmType);
@@ -81,6 +84,7 @@ public class Game extends Console{
     /**
      * Start the online game
      */
+    @Override
     public void start() {
         Boolean exit = false;
         display("--------Sudoku Game-------\n");
