@@ -13,7 +13,6 @@ import java.util.Scanner;
  * This class represent the Configuration console interface
  */
 public class Configuration extends Console {
-    private PropertiesWriter propertiesWriter = new PropertiesWriter();
     private Boolean exit = false;
 
     private final Map<Integer, Method> MENU_OPTIONS = new HashMap<>();
@@ -41,6 +40,7 @@ public class Configuration extends Console {
     }
 
     public Configuration() throws NoSuchMethodException {
+        super();
         //Do nothing
     }
 
@@ -93,6 +93,18 @@ public class Configuration extends Console {
     private void selectLevel(int option) {
         String value = LEVELS_OPTIONS.get(option);
         propertiesWriter.setProperty(PropertiesWriter.LEVEL, value);
+        if(value.equals("Custom")){
+            enterCustomLimits();
+        }
+    }
+
+    private void enterCustomLimits() {
+        display("Enter min limit:");
+        String min = input.next();
+        propertiesWriter.setProperty(PropertiesWriter.CUSTOM_MIN, min);
+        display("Enter max limit");
+        String max = input.next();
+        propertiesWriter.setProperty(PropertiesWriter.CUSTOM_MAX, max);
     }
 
     public void startSelectAlgorithm() {
