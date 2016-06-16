@@ -17,7 +17,7 @@ import java.util.Map;
 public class Game extends Console {
     private SudokuBoard board;
     private SudokuBoard solved;
-
+    private SudokuBoard previous;
     private static final Map<String, Algorithm> ALGORITHM_OPTIONS = new HashMap<>();
 
     static {
@@ -72,6 +72,7 @@ public class Game extends Console {
         String minComplexity = propertiesReader.getProperty(BOTTOM_LIMIT_LEVELS.get(level));
         String maxComplexity = propertiesReader.getProperty(TOP_LIMIT_LEVELS.get(level));
         this.board = SudokuGenerator.generate(Integer.parseInt(minComplexity), Integer.parseInt(maxComplexity));
+        this.previous = new SudokuBoard(this.board.parseToArray());
     }
 
     private void generateSolution() {
@@ -114,8 +115,16 @@ public class Game extends Console {
     }
 
     private String enterPosition() {
+        String pos;
         display("Enter a position [1A-9I]:");
-        return input.next();
+        pos = input.next();
+        int row = Character.getNumericValue(pos.charAt(0)) - 1;
+        int col = LETTERS.get(Character.toString(pos.charAt(1)));
+        if (this.previous.getCell(row, col).getValue() != 0) {
+            display("ERROR:: Select another cell");
+            start();
+        }
+        return pos;
     }
 
     private String enterNumber() {
